@@ -1,40 +1,25 @@
 'use client';
-
 import * as React from 'react';
 import { Sidebar } from '@/components/organisms/Sidebar';
 import { TopNavbar } from '@/components/organisms/TopNavbar';
 import { DashboardContent } from '@/components/organisms/DashboardContent';
-import { UserManagement } from '@/components/organisms/UserManagement';
 import {
-  OrdersManagement,
   ManualPayments,
-  RefillRequests,
-  TicketsSupport,
-  ServicesCategories,
-  ProvidersAPI,
-  Subscriptions,
-  AffiliateSystem,
-  ChildPanels,
-  RefundRequests,
-  BroadcastMessages,
-  ReportsLogs
 } from '@/components/organisms/PlaceholderPages';
+import { JoinManagement } from '../organisms/JoiningDashboard';
+import { AccountManagement } from '../organisms/AccountManagement';
+import { LogViewer } from '../organisms/LogViewer';
+import { SettingsPanel } from '../organisms/SettingsPanel';
+import { TaskSettings } from '../organisms/TaskSettings';
 
 type CurrentPage =
   | 'dashboard'
-  | 'manage-users'
+  | 'forwarder-dashboard'
   | 'orders'
   | 'payments'
   | 'refill'
   | 'tickets'
   | 'services'
-  | 'providers'
-  | 'subscriptions'
-  | 'affiliate'
-  | 'panels'
-  | 'refunds'
-  | 'broadcast'
-  | 'reports';
 
 export function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
@@ -50,65 +35,37 @@ export function DashboardLayout() {
 
   const getPageTitle = () => {
     switch (currentPage) {
-      case 'manage-users':
-        return 'Management';
+      case 'forwarder-dashboard':
+        return 'Forwarder Dashboard';
       case 'orders':
-        return 'Orders Management';
+        return 'Joining Dashboard';
       case 'payments':
         return 'Manual Payments';
       case 'refill':
-        return 'Refill Requests';
+        return 'Accounts';
       case 'tickets':
-        return 'Tickets Support';
+        return 'Logs';
       case 'services':
-        return 'Services & Categories';
-      case 'providers':
-        return 'Providers (API)';
-      case 'subscriptions':
-        return 'Subscriptions';
-      case 'affiliate':
-        return 'Affiliate System';
-      case 'panels':
-        return 'Child Panels';
-      case 'refunds':
-        return 'Refund Requests';
-      case 'broadcast':
-        return 'Broadcast Messages';
-      case 'reports':
-        return 'Reports & Logs';
+        return 'Settings';
       default:
-        return 'System Status';
+        return 'checker Dashboard';
     }
   };
 
   const renderContent = () => {
     switch (currentPage) {
-      case 'manage-users':
-        return <UserManagement />;
+      case 'forwarder-dashboard':
+        return <TaskSettings />;
       case 'orders':
-        return <OrdersManagement />;
+        return <JoinManagement />;
       case 'payments':
         return <ManualPayments />;
       case 'refill':
-        return <RefillRequests />;
+        return <AccountManagement />;
       case 'tickets':
-        return <TicketsSupport />;
+        return <LogViewer />;
       case 'services':
-        return <ServicesCategories />;
-      case 'providers':
-        return <ProvidersAPI />;
-      case 'subscriptions':
-        return <Subscriptions />;
-      case 'affiliate':
-        return <AffiliateSystem />;
-      case 'panels':
-        return <ChildPanels />;
-      case 'refunds':
-        return <RefundRequests />;
-      case 'broadcast':
-        return <BroadcastMessages />;
-      case 'reports':
-        return <ReportsLogs />;
+        return <SettingsPanel />;
       default:
         return <DashboardContent />;
     }

@@ -7,37 +7,21 @@ import {
   LayoutDashboard,
   Users,
   ShoppingCart,
-  CreditCard,
   RefreshCw,
   HelpCircle,
   Settings,
-  Database,
-  Zap,
-  UserCheck,
-  PanelLeft,
-  Undo2,
-  Megaphone,
-  BarChart3,
-  Menu,
   X
 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 
 type PageType =
   | 'dashboard'
-  | 'manage-users'
+  | 'forwarder-dashboard'
   | 'orders'
   | 'payments'
   | 'refill'
   | 'tickets'
-  | 'services'
-  | 'providers'
-  | 'subscriptions'
-  | 'affiliate'
-  | 'panels'
-  | 'refunds'
-  | 'broadcast'
-  | 'reports';
+  | 'services';
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
@@ -47,19 +31,11 @@ interface SidebarProps {
 
 const navigationItems = [
   { icon: LayoutDashboard, label: 'Checker Dashboard', key: 'dashboard' },
-  { icon: Users, label: 'Forwarder Dashboard', key: 'manage-users' },
+  { icon: Users, label: 'Forwarder Dashboard', key: 'forwarder-dashboard' },
   { icon: ShoppingCart, label: 'Joining Dashboard', key: 'orders' },
-  { icon: CreditCard, label: 'Manual Payments', key: 'payments' },
   { icon: RefreshCw, label: 'Accounts', key: 'refill' },
   { icon: HelpCircle, label: 'Logs', key: 'tickets' },
   { icon: Settings, label: 'Settings', key: 'services' },
-  // { icon: Database, label: 'Providers (API Integrations)', key: 'providers' },
-  // { icon: Zap, label: 'Subscriptions', key: 'subscriptions' },
-  // { icon: UserCheck, label: 'Affiliate System', key: 'affiliate' },
-  // { icon: PanelLeft, label: 'Child Panels', key: 'panels' },
-  // { icon: Undo2, label: 'Refund Requests', key: 'refunds' },
-  // { icon: Megaphone, label: 'Broadcast Messages', key: 'broadcast' },
-  // { icon: BarChart3, label: 'Reports & Logs', key: 'reports' }
 ];
 
 export function Sidebar({ isOpen, onToggle, currentPage, onNavigate }: SidebarProps) {
