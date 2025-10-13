@@ -87,7 +87,7 @@ export function DashboardContent() {
                 borderColor: 'white'
               },
               '&.Mui-focused fieldset': {
-                borderColor: 'white'
+                borderColor: 'gray'
               }
             },
             '& .MuiInputLabel-root': {

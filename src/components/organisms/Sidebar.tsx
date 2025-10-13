@@ -80,11 +80,11 @@ export function Sidebar({ isOpen, onToggle, currentPage, onNavigate }: SidebarPr
         <div className='flex items-center justify-between border-b border-border/60 dark:border-purple-700 p-6'>
           <div className='flex items-center space-x-3'>
             <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-foreground/10 dark:bg-white'>
-              <span className='text-lg font-bold text-foreground dark:text-purple-900'>U</span>
+              <span className='text-lg font-bold text-foreground dark:text-purple-900'>TG</span>
             </div>
             <div>
               <Typography variant='h6' className='font-bold text-foreground'>
-                UHQ
+                TG_PY
               </Typography>
               <Typography variant='small' className='text-muted-foreground'>
                 SMM

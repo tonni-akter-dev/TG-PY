@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Typography, List, ListItem, ListItemText, Chip } from '@mui/material';
-import { Sync, Warning } from '@mui/icons-material';
+import { Box, Typography} from '@mui/material';
+import SyncIcon from '@mui/icons-material/Sync';
+import WarningIcon from '@mui/icons-material/Warning';
 
 const ResultsPanel = () => {
   return (
@@ -43,46 +44,46 @@ const ResultsPanel = () => {
       <Typography variant="h6" className="mb-8 font-bold text-white">
         Recent Activities
       </Typography>
-      
-     <List className="bg-[#252139] rounded-lg">
-  <ListItem className="border-b border-gray-700">
-    <ListItemText
-      className="text-white"
-      primary={
-        <Box className="flex items-center">
-          {/* <Chip label="Light theme applied" size="small" className="mr-2 bg-blue-600 !text-white" /> */}
-          <Typography variant="caption" className="text-gray-400">[2025-10-06 10:12:06]</Typography>
-        </Box>
-      }
-      secondary="Light theme applied"
-      secondaryTypographyProps={{ className: "text-white" }}
-    />
-  </ListItem>
-  <ListItem className="border-b border-gray-700">
-    <ListItemText
-      primary={
-        <Box className="flex items-center">
-          <Sync className="mr-2 text-blue-500" />
-          <Typography variant="caption" className="text-gray-400">[2025-10-06 10:12:06]</Typography>
-        </Box>
-      }
-      secondary="🔄 Syncing accounts with database..."
-      secondaryTypographyProps={{ className: "text-white" }}
-    />
-  </ListItem>
-  <ListItem>
-    <ListItemText
-      primary={
-        <Box className="flex items-center">
-          <Warning className="mr-2 text-yellow-500" />
-          <Typography variant="caption" className="text-gray-400">[2025-10-06 10:12:06]</Typography>
-        </Box>
-      }
-      secondary="⚠️ Sync warning: AccountManager object has no attribute 'get_accounts' (continuing...)"
-      secondaryTypographyProps={{ className: "text-white" }}
-    />
-  </ListItem>
-</List>
+
+<Box className="bg-[#252139] rounded-lg">
+  {/* First Item */}
+  <Box className="p-3 border-b border-gray-700">
+    <Box className="flex items-center mb-1">
+      <Typography variant="caption" className="text-gray-400">
+        [2025-10-06 10:12:06]
+      </Typography>
+    </Box>
+    <Typography variant="body2" className="text-white">
+      Light theme applied
+    </Typography>
+  </Box>
+
+  {/* Second Item */}
+  <Box className="p-3 border-b border-gray-700">
+    <Box className="flex items-center mb-1">
+      <SyncIcon className="mr-2 text-blue-500" fontSize="small" />
+      <Typography variant="caption" className="text-gray-400">
+        [2025-10-06 10:12:06]
+      </Typography>
+    </Box>
+    <Typography variant="body2" className="text-white">
+      🔄 Syncing accounts with database...
+    </Typography>
+  </Box>
+
+  {/* Third Item */}
+  <Box className="p-3">
+    <Box className="flex items-center mb-1">
+      <WarningIcon className="mr-2 text-yellow-500" fontSize="small" />
+      <Typography variant="caption" className="text-gray-400">
+        [2025-10-06 10:12:06]
+      </Typography>
+    </Box>
+    <Typography variant="body2" className="text-white">
+      ⚠️ Sync warning: AccountManager object has no attribute &#39;get_accounts&apos; (continuing...)
+    </Typography>
+  </Box>
+</Box>
     </Box>
   );
 };
