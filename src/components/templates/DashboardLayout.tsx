@@ -3,9 +3,6 @@ import * as React from 'react';
 import { Sidebar } from '@/components/organisms/Sidebar';
 import { TopNavbar } from '@/components/organisms/TopNavbar';
 import { DashboardContent } from '@/components/organisms/DashboardContent';
-import {
-  ManualPayments,
-} from '@/components/organisms/PlaceholderPages';
 import { JoinManagement } from '../organisms/JoiningDashboard';
 import { AccountManagement } from '../organisms/AccountManagement';
 import { LogViewer } from '../organisms/LogViewer';
@@ -39,8 +36,6 @@ export function DashboardLayout() {
         return 'Forwarder Dashboard';
       case 'orders':
         return 'Joining Dashboard';
-      case 'payments':
-        return 'Manual Payments';
       case 'refill':
         return 'Accounts';
       case 'tickets':
@@ -58,8 +53,6 @@ export function DashboardLayout() {
         return <TaskSettings />;
       case 'orders':
         return <JoinManagement />;
-      case 'payments':
-        return <ManualPayments />;
       case 'refill':
         return <AccountManagement />;
       case 'tickets':

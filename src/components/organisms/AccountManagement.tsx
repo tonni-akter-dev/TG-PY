@@ -278,7 +278,7 @@ export function AccountManagement() {
           )}
         </DialogContent>
         <DialogActions className="justify-end gap-2 p-3">
-          <Button variant="outline" onClick={handleCancel} disabled={isConnecting}>
+          <Button  onClick={handleCancel} disabled={isConnecting}>
             Cancel
           </Button>
           <Button onClick={handleConnect} disabled={isConnecting || !phoneNumber || !apiId || !apiHash}>
