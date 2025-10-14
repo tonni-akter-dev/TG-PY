@@ -86,7 +86,7 @@ export function AccountManagement() {
   };
 
   return (
-    <div className='space-y-6 p-4 sm:p-6 lg:space-y-8'>
+    <div className='space-y-6 lg:space-y-8 bg-black'>
       {/* Header */}
      
       {/* Accounts Table */}

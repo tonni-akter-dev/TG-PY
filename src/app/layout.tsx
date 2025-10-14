@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'UHQ SMM Dashboard',
-  description: 'Professional UHQ SMM Dashboard'
+  title: 'TG_PY Dashboard',
+  description: 'Professional TG_PY Dashboard'
 };
 
 export default function RootLayout({
@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased dark:bg-gradient-dark`}>
+      <body className={`${inter.variable} font-sans antialiased dark:bg-dark`}>
         <ThemeProvider defaultTheme='system' storageKey='smm-ui-theme'>
           {children}
         </ThemeProvider>

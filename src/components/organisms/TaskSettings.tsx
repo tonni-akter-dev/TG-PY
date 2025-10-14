@@ -325,7 +325,7 @@ export function TaskSettings() {
 
 
   return (
-    <div className='space-y-6 p-4 sm:p-6 lg:space-y-8'>
+    <div className='space-y-6 lg:space-y-8 bg-black'>
       {/* Global Controls */}
       <Box className='border border-gray-500 rounded-lg p-4'>
         <Typography variant='h6' className='mb-4 text-white font-medium'>

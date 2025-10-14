@@ -88,7 +88,7 @@ export function LogViewer() {
   );
 
   return (
-    <Card className='border-border bg-card m-8'>
+    <Card className='border-border bg-card '>
       <CardHeader className='px-6 py-4 border-b border-border'>
         <CardTitle className='text-foreground'>Logs</CardTitle>
       </CardHeader>

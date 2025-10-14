@@ -62,9 +62,7 @@ export function Sidebar({ isOpen, onToggle, currentPage, onNavigate }: SidebarPr
               <Typography variant='h6' className='font-bold text-foreground'>
                 TG_PY
               </Typography>
-              <Typography variant='small' className='text-muted-foreground'>
-                SMM
-              </Typography>
+            
             </div>
           </div>
           <Button
