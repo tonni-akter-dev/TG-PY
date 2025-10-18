@@ -78,7 +78,7 @@ export function DashboardLayout() {
       <TopNavbar onMenuToggle={toggleSidebar} pageTitle={getPageTitle()} />
 
       {/* Main Content */}
-      <main className='pt-16 lg:ml-64 bg-black'>
+  <main className='pt-16 lg:ml-64 bg-gray-100 dark:bg-gray-900'>
         <div className='min-h-screen p-8'>{renderContent()}</div>
       </main>
     </div>

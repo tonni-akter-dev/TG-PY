@@ -210,12 +210,16 @@ export function JoinManagement() {
   // };
 
   return (
-    <div className='space-y-6 lg:space-y-8 bg-black'>
+    <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
       {/* Global Controls */}
       <Box className="border border-gray-500 rounded-lg p-4">
-        <Typography variant="h6" className="mb-4 text-white font-medium">
-          Global Controls
-        </Typography>
+<Typography
+  variant="h6"
+  className="mb-4 font-medium text-gray-900 dark:text-white"
+>
+  Global Controls
+</Typography>
+
         <Box className="flex flex-wrap gap-2">
           <Button variant="outline" className="text-green-600 border-green-600">
             Start Tasks

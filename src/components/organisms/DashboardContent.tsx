@@ -37,7 +37,7 @@ const metricsData = [
 
 export function DashboardContent() {
   return (
-    <div className='space-y-6 lg:space-y-8 bg-black'>
+    <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
       {/* Metrics Cards */}
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6'>
         {metricsData.map((metric, index) => {
@@ -57,7 +57,7 @@ export function DashboardContent() {
       </div>
       <div>
         <Typography className='text-foreground'>Quick Actions</Typography>
-        <div className='mt-2 flex items-center space-x-2'>
+        <div className='mt-2 flex flex-wrap gap-4 items-center space-x-2'>
           <Button>Sync Now</Button>
           <Button>Start Checker</Button>
           <Button>Stop Checker</Button>

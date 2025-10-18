@@ -5,7 +5,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 
 const ResultsPanel = () => {
   return (
-    <Box className="w-full p-6">
+    <Box className="w-full">
       <Typography variant="h6" className="mb-4 font-bold text-foreground">
         Results
       </Typography>
