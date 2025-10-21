@@ -1,5 +1,14 @@
-import { DashboardLayout } from '@/components/templates/DashboardLayout';
+'use client'
+
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  return <DashboardLayout />;
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace('/dashboard')
+  }, [router])
+
+  return null
 }
