@@ -60,7 +60,7 @@ export function AccountManagement() {
     setLogs(['Attempting to connect...']);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/connect/start`, {
+      const response = await fetch(`http://185.255.131.231:8000/api/v1/accounts/connect/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export function AccountManagement() {
     setLogs(['Verifying...']);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/connect/verify`, {
+      const response = await fetch(`http://185.255.131.231:8000/api/v1/accounts/connect/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +168,7 @@ export function AccountManagement() {
   const handleRemoveAccount = async (phone: string) => {
     setIsRemovingAccount(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/${phone}`, {
+      const response = await fetch(`http://185.255.131.231:8000/api/v1/accounts/${phone}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -204,7 +204,7 @@ export function AccountManagement() {
   const handleDeactivateAll = async () => {
     setIsDeactivatingAll(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/deactivate-all`, {
+      const response = await fetch(`http://185.255.131.231:8000/api/v1/accounts/deactivate-all`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -240,7 +240,7 @@ export function AccountManagement() {
   const handleActivateAll = async () => {
     setIsActivatingAll(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/activate-all`, {
+      const response = await fetch(`http://185.255.131.231:8000/api/v1/accounts/activate-all`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

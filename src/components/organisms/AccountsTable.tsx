@@ -28,7 +28,7 @@ const AccountsTable = ({ onRemoveAccount }: { onRemoveAccount: (num: string) => 
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts`, {
+            const response = await fetch(`http://185.255.131.231:8000/api/v1/accounts`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
