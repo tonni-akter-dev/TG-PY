@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const protectedRoutes = ["/dashboard"];
 
 // Public authentication routes
-const authRoutes = ["/auth/login", "/auth/register"];
+const authRoutes = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
   console.log(token, "token get")
   // If accessing protected route without token, redirect to login
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // If accessing auth routes with token, redirect to dashboard
@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/auth/login',
-    '/auth/register',
+    '/login',
+    '/register',
   ],
 };
