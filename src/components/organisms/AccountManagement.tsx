@@ -33,7 +33,7 @@ export function AccountManagement() {
   const [verificationCode, setVerificationCode] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isVerifying, setIsVerifying] = React.useState(false);
-  
+
   // New states for API operations
   const [isDeactivatingAll, setIsDeactivatingAll] = React.useState(false);
   const [isActivatingAll, setIsActivatingAll] = React.useState(false);
@@ -87,9 +87,9 @@ export function AccountManagement() {
         setLogs(['Connection process started successfully.']);
       }
     } catch (err) {
-  const errorMessage =
-    err instanceof Error ? err.message : 'An unknown error occurred.';
-  setError(errorMessage);      setError(errorMessage);
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage); setError(errorMessage);
       setLogs((prevLogs) => [...prevLogs, `Error: ${errorMessage}`]);
     } finally {
       setIsConnecting(false);
@@ -137,9 +137,9 @@ export function AccountManagement() {
         setRefreshTable(prev => prev + 1); // Trigger table refresh
       }, 2000);
     } catch (err) {
-  const errorMessage =
-    err instanceof Error ? err.message : 'An unknown error occurred.';
-  setError(errorMessage);      setError(errorMessage);
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage); setError(errorMessage);
       setLogs((prevLogs) => [...prevLogs, `Error: ${errorMessage}`]);
       setNotification({
         open: true,
@@ -188,9 +188,9 @@ export function AccountManagement() {
       });
       setRefreshTable(prev => prev + 1); // Trigger table refresh
     } catch (err) {
-  const errorMessage =
-    err instanceof Error ? err.message : 'An unknown error occurred.';
-  setError(errorMessage);      setNotification({
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage); setNotification({
         open: true,
         message: `Failed to remove account: ${errorMessage}`,
         severity: 'error',
@@ -224,9 +224,9 @@ export function AccountManagement() {
       });
       setRefreshTable(prev => prev + 1); // Trigger table refresh
     } catch (err) {
-  const errorMessage =
-    err instanceof Error ? err.message : 'An unknown error occurred.';
-  setError(errorMessage);      setNotification({
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage); setNotification({
         open: true,
         message: `Failed to deactivate accounts: ${errorMessage}`,
         severity: 'error',
@@ -260,9 +260,9 @@ export function AccountManagement() {
       });
       setRefreshTable(prev => prev + 1); // Trigger table refresh
     } catch (err) {
-  const errorMessage =
-    err instanceof Error ? err.message : 'An unknown error occurred.';
-  setError(errorMessage);      setNotification({
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage); setNotification({
         open: true,
         message: `Failed to activate accounts: ${errorMessage}`,
         severity: 'error',
@@ -290,17 +290,17 @@ export function AccountManagement() {
         <Button variant="outline" className="text-gray-600 border-gray-600">
           Refresh Account Info
         </Button>
-        <Button 
-          variant="outline" 
-          className="text-green-600 border-green-600" 
+        <Button
+          variant="outline"
+          className="text-green-600 border-green-600"
           onClick={handleActivateAll}
           disabled={isActivatingAll}
         >
           {isActivatingAll ? 'Activating...' : 'Activate All'}
         </Button>
-        <Button 
-          variant="outline" 
-          className="text-red-600 border-red-600" 
+        <Button
+          variant="outline"
+          className="text-red-600 border-red-600"
           onClick={handleDeactivateAll}
           disabled={isDeactivatingAll}
         >
