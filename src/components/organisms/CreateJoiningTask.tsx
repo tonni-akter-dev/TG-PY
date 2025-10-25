@@ -26,7 +26,16 @@ interface CreateTaskModalProps {
 }
 
 const CreateJoiningTask: React.FC<CreateTaskModalProps> = ({ isOpen, onClose }) => {
-    const token = localStorage.getItem('token');
+    const [token, setToken] = React.useState<string | null>(null);
+
+  // Get token from localStorage only on the client side
+  React.useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
+
+
+  // State for met
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);

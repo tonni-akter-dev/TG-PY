@@ -32,12 +32,6 @@ function GlobalSettings() {
   const [useRandomSleep, setUseRandomSleep] = React.useState(true);
   const [logFailedGroups, setLogFailedGroups] = React.useState(true);
   const [floodWaitHandling, setFloodWaitHandling] = React.useState(true);
-  const [replyMessage, setReplyMessage] = React.useState(
-    "This is an advertising bot @vipstore DMs won't be seen here"
-  );
-  const [globalReplyMessage, setGlobalReplyMessage] = React.useState(
-    "Hi This is an advertising bot. @vipstore DMs won't be seen here"
-  );
 
   return (
     <Card className='border-border bg-card'>
@@ -107,80 +101,7 @@ function GlobalSettings() {
             sx={{ margin: 0, color: 'inherit' }}
           />
         </div>
-        <div className='space-y-4'>
-          <div>
-            <Typography variant='body' className='font-medium mb-2 text-foreground'>
-              Reply Message
-            </Typography>
-            <TextField
-              multiline
-              rows={3}
-              value={replyMessage}
-              onChange={(e) => setReplyMessage(e.target.value)}
-              fullWidth
-              placeholder='Enter reply message...'
-              variant='outlined'
-              InputProps={{
-                sx: {
-                  backgroundColor: 'hsl(var(--card))',
-                  color: 'hsl(var(--foreground))',
-                  '& .MuiInputBase-input::placeholder': {
-                    color: 'hsl(var(--muted-foreground))'
-                  }
-                }
-              }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'hsl(var(--border))'
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'hsl(var(--primary))'
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'hsl(var(--primary))'
-                  }
-                }
-              }}
-            />
-          </div>
-          <div>
-            <Typography variant='body' className='font-medium mb-2 text-foreground'>
-              Global Reply Message
-            </Typography>
-            <TextField
-              multiline
-              rows={3}
-              value={globalReplyMessage}
-              onChange={(e) => setGlobalReplyMessage(e.target.value)}
-              fullWidth
-              placeholder='Enter global reply message...'
-              variant='outlined'
-              InputProps={{
-                sx: {
-                  backgroundColor: 'hsl(var(--card))',
-                  color: 'hsl(var(--foreground))',
-                  '& .MuiInputBase-input::placeholder': {
-                    color: 'hsl(var(--muted-foreground))'
-                  }
-                }
-              }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'hsl(var(--border))'
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'hsl(var(--primary))'
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'hsl(var(--primary))'
-                  }
-                }
-              }}
-            />
-          </div>
-        </div>
+     
       </CardContent>
     </Card>
   );
@@ -189,7 +110,16 @@ function GlobalSettings() {
 export function TaskSettings() {
   const [loading, setLoading] = React.useState(false);
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = React.useState(false);
-  const token = localStorage.getItem('token');
+  const [token, setToken] = React.useState<string | null>(null);
+
+  // Get token from localStorage only on the client side
+  React.useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
+
+
+  // State for met
 
   const openModal = () => setIsCreateTaskModalOpen(true);
   const closeModal = () => setIsCreateTaskModalOpen(false);

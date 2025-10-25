@@ -23,24 +23,33 @@ interface TaskSettingsData {
     selectedTaskId: string;
     progress: { current: number; total: number };
     success: number;
-    name: string;
-    message_groups: MessageGroup[];
 }
 
 interface TaskSettingsModalProps {
     isOpen: boolean;
     onClose: () => void;
-    taskSettings: TaskSettingsData | null;
+    taskSettings?: TaskSettingsData | null;
     editMode?: boolean;
 }
 
-const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose, taskSettings}) => {
-    const token = localStorage.getItem('token');
+
+const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose, taskSettings }) => {
+    console.log(taskSettings, "ttttttttttttttttttt")
+    const [token, setToken] = React.useState<string | null>(null);
+
+  // Get token from localStorage only on the client side
+  React.useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
+
+
+  // State for met
     const [loading, setLoading] = useState(false);
     const [accountSettingsLoading, setAccountSettingsLoading] = useState(false);
     const [taskDetailsLoading, setTaskDetailsLoading] = useState(false);
     const [tabValue, setTabValue] = useState(0);
-    
+
     const [accountSettings, setAccountSettings] = useState({
         interval_min: 0,
         interval_max: 0,
@@ -49,7 +58,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
         random_sleep_time_max: 0,
         reply_message: ''
     });
-    
+
     const [taskData, setTaskData] = useState({
         name: '',
         message_groups: [] as MessageGroup[]
@@ -82,7 +91,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
 
             const data = await response.json();
             console.log('Account settings response:', data);
-            
+
             if (data.status === 'success' && data.data) {
                 // Use the actual data from the API response
                 setAccountSettings({
@@ -121,7 +130,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
 
             const data = await response.json();
             console.log('Task details response:', data);
-            
+
             if (data.status === 'success' && data.data) {
                 setTaskData({
                     name: data.data.name || '',

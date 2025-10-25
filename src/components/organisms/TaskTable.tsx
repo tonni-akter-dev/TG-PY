@@ -48,7 +48,16 @@ interface Task {
 }
 
 const TaskTable = () => {
-    const token = localStorage.getItem('token');
+    const [token, setToken] = React.useState<string | null>(null);
+
+  // Get token from localStorage only on the client side
+  React.useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
+
+
+  // State for met
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);

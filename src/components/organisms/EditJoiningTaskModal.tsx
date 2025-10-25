@@ -35,11 +35,20 @@ interface EditTaskPayload {
 interface EditTaskModalProps {
     isOpen: boolean;
     onClose: () => void;
-    taskId: string;
+    taskId: number | undefined;
 }
 
 const EditJoiningTaskModal: React.FC<EditTaskModalProps> = ({ isOpen, onClose, taskId }) => {
-    const token = localStorage.getItem('token');
+    const [token, setToken] = React.useState<string | null>(null);
+
+  // Get token from localStorage only on the client side
+  React.useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
+
+
+  // State for met
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -70,7 +79,7 @@ const EditJoiningTaskModal: React.FC<EditTaskModalProps> = ({ isOpen, onClose, t
 
     const fetchTask = async () => {
         if (!taskId) return;
-        
+
         setFetchingTask(true);
         try {
             const response = await fetch(`http://185.255.131.231:8000/api/v1/joining/task/${taskId}`, {
@@ -86,8 +95,8 @@ const EditJoiningTaskModal: React.FC<EditTaskModalProps> = ({ isOpen, onClose, t
             }
             const result = await response.json();
             const task = result.data;
-            console.log(task,"fffffffffffffffffff")
-            
+            console.log(task, "fffffffffffffffffff")
+
             // Populate form with task data
             setTaskName(task.name);
             setSelectedAccount(task.account_phone);

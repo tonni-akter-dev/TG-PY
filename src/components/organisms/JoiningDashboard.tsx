@@ -26,16 +26,18 @@ interface Task {
   id: number;
   name: string;
   account_phone: string;
+
 }
 
 interface TaskApiResponse {
-  data: Task[];
+  data: {
+    items: Task[];
+  };
   total: number;
   page: number;
   size: number;
   totalPages: number;
 }
-
 function GlobalJoinSettings() {
   const [minDelay, setMinDelay] = React.useState(30);
   const [maxDelay, setMaxDelay] = React.useState(60);
@@ -168,10 +170,10 @@ function GlobalJoinSettings() {
 
 export function JoinManagement() {
   const [editModalOpen, setEditModalOpen] = React.useState(false);
-  const [selectedTaskId, setSelectedTaskId] = React.useState('');
+  const [selectedTaskId, setSelectedTaskId] = React.useState<number>();
 
   // Open edit modal for a specific task
-  const handleEditTask = (taskId: string) => {
+  const handleEditTask = (taskId: number) => {
     setSelectedTaskId(taskId);
     setEditModalOpen(true);
   };
@@ -452,8 +454,6 @@ export function JoinManagement() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      // Refresh tasks to get updated status
       fetchTasks(currentPage);
     } catch (err: any) {
       console.error("Failed to start all tasks:", err);
@@ -698,8 +698,7 @@ export function JoinManagement() {
                                 : task.status === 'done' || task.status === 'completed'
                                   ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
                                   : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
-                            }
-                          >
+                            }>
                             {task.status}
                             {pollingIntervals[task.id] && (
                               <span className="ml-1 inline-block h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
