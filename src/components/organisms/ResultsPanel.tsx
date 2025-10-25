@@ -1,13 +1,39 @@
-
-// ResultsPanel component
+import React from 'react';
 import { Box, Typography } from '@mui/material';
-import SyncIcon from '@mui/icons-material/Sync';
-import WarningIcon from '@mui/icons-material/Warning';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
+import LogViewer from './CheckerLogViewer';
 
-const ResultsPanel = ({ results, activities }) => {
-  const formatDate = (dateString) => {
+// Define the type for the results prop
+interface GroupsChecked {
+  current: number;
+  total: number;
+}
+
+interface EntityTypes {
+  group: number;
+  channel: number;
+  topic: number;
+}
+
+interface ResultsData {
+  groupsChecked: GroupsChecked;
+  validWithFilter: number;
+  validOnly: number;
+  topicsValid: number;
+  channelsValid: number;
+  invalid: number;
+  accountIssues: number;
+  joinRequests: number;
+  entityTypes: EntityTypes;
+  startedAt: string | number | Date;
+  finishedAt: string | number | Date;
+}
+
+interface ResultsPanelProps {
+  results: ResultsData;
+}
+
+const ResultsPanel: React.FC<ResultsPanelProps> = ({ results }) => {
+  const formatDate = (dateString: string | number | Date): string => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleString();
@@ -18,7 +44,7 @@ const ResultsPanel = ({ results, activities }) => {
       <Typography variant="h6" className="mb-4 font-bold text-foreground">
         Results
       </Typography>
-      
+
       <Box className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <Box className="bg-card p-3 rounded-lg border-border">
           <Typography variant="body2" className="text-muted-foreground mb-1">Groups Checked</Typography>
@@ -55,12 +81,12 @@ const ResultsPanel = ({ results, activities }) => {
           <Typography variant="h6" className="text-foreground font-semibold">{results.joinRequests}</Typography>
         </Box>
       </Box>
-      
+
       {/* Entity Types Section */}
       <Typography variant="h6" className="mb-4 font-bold text-foreground">
         Entity Types
       </Typography>
-      
+
       <Box className="grid grid-cols-3 gap-4 mb-6">
         <Box className="bg-card p-3 rounded-lg border-border">
           <Typography variant="body2" className="text-muted-foreground mb-1">Groups</Typography>
@@ -75,12 +101,12 @@ const ResultsPanel = ({ results, activities }) => {
           <Typography variant="h6" className="text-foreground font-semibold">{results.entityTypes.topic}</Typography>
         </Box>
       </Box>
-      
+
       {/* Time Information */}
       <Typography variant="h6" className="mb-4 font-bold text-foreground">
         Time Information
       </Typography>
-      
+
       <Box className="grid grid-cols-2 gap-4 mb-6">
         <Box className="bg-card p-3 rounded-lg border-border">
           <Typography variant="body2" className="text-muted-foreground mb-1">Started At</Typography>
@@ -91,29 +117,19 @@ const ResultsPanel = ({ results, activities }) => {
           <Typography variant="h6" className="text-foreground font-semibold">{formatDate(results.finishedAt)}</Typography>
         </Box>
       </Box>
-      
+
       <Typography variant="h6" className="mb-8 font-bold text-foreground">
         Recent Activities
       </Typography>
 
-      <Box className="bg-card rounded-lg border-border">
-        {activities.map((activity, index) => (
-          <Box key={index} className={`p-3 ${index < activities.length - 1 ? 'border-b border-border' : ''}`}>
-            <Box className="flex items-center mb-1">
-              {activity.type === 'sync' && <SyncIcon className="mr-2 text-blue-500" fontSize="small" />}
-              {activity.type === 'warning' && <WarningIcon className="mr-2 text-yellow-500" fontSize="small" />}
-              {activity.type === 'success' && <CheckCircleIcon className="mr-2 text-green-500" fontSize="small" />}
-              {activity.type === 'error' && <ErrorIcon className="mr-2 text-red-500" fontSize="small" />}
-              <Typography variant="caption" className="text-muted-foreground">
-                {activity.timestamp}
-              </Typography>
-            </Box>
-            <Typography variant="body2" className="text-foreground">
-              {activity.message}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
+      <LogViewer
+        wsUrl="ws://185.255.131.231:8000/api/v1/logs/stream"
+        logName="checker_service.log"
+        title="Checker Service Logs"
+        maxLogs={200}
+        autoReconnect={true}
+        reconnectInterval={5000}
+      />
     </Box>
   );
 };

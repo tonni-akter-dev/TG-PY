@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Play, Square, Trash2, Edit2, Download, MoreHorizontal } from 'lucide-react';
 import CreateJoiningTask from './CreateJoiningTask';
 import EditJoiningTaskModal from './EditJoiningTaskModal';
+import LogViewer from './CheckerLogViewer';
 
 interface Task {
   status: React.ReactNode;
@@ -804,7 +805,14 @@ export function JoinManagement() {
         taskId={selectedTaskId}
       />
       {/* Logs Section */}
-      <LogsSection title="Live Join Logs" />
+      <LogViewer
+        wsUrl="ws://185.255.131.231:8000/api/v1/logs/stream"
+        logName="joining_service.log"
+        title="Joining Service Logs"
+        maxLogs={200}
+        autoReconnect={true}
+        reconnectInterval={5000}
+      />
       <CreateJoiningTask isOpen={isCreateTaskModalOpen} onClose={closeModal} />
     </div>
   );

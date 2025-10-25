@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 'use client';
 import * as React from 'react';
 import { Sidebar } from '@/components/organisms/Sidebar';
@@ -5,9 +6,9 @@ import { TopNavbar } from '@/components/organisms/TopNavbar';
 import { DashboardContent } from '@/components/organisms/DashboardContent';
 import { JoinManagement } from '../organisms/JoiningDashboard';
 import { AccountManagement } from '../organisms/AccountManagement';
-import { LogViewer } from '../organisms/LogViewer';
 import { SettingsPanel } from '../organisms/SettingsPanel';
 import { TaskSettings } from '../organisms/TaskSettings';
+import { LogViewer } from '../organisms/LogViewer';
 
 type CurrentPage =
   | 'dashboard'
@@ -78,7 +79,7 @@ export function DashboardLayout() {
       <TopNavbar onMenuToggle={toggleSidebar} pageTitle={getPageTitle()} />
 
       {/* Main Content */}
-  <main className='pt-16 lg:ml-64 bg-gray-100 dark:bg-gray-900'>
+      <main className='pt-16 lg:ml-64 bg-gray-100 dark:bg-gray-900'>
         <div className='min-h-screen p-8'>{renderContent()}</div>
       </main>
     </div>

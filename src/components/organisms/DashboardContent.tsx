@@ -12,7 +12,31 @@ import TextField from '@mui/material/TextField';
 import ResultsPanel from './ResultsPanel';
 import { toast } from 'react-toastify';
 import { handleApiError } from '@/lib/helper';
+// Define the type for the results prop
+interface GroupsChecked {
+  current: number;
+  total: number;
+}
 
+interface EntityTypes {
+  group: number;
+  channel: number;
+  topic: number;
+}
+
+interface ResultsData {
+  groupsChecked: GroupsChecked;
+  validWithFilter: number;
+  validOnly: number;
+  topicsValid: number;
+  channelsValid: number;
+  invalid: number;
+  accountIssues: number;
+  joinRequests: number;
+  entityTypes: EntityTypes;
+  startedAt: string | number | Date;
+  finishedAt: string | number | Date;
+}
 const CHECKER_API_URL = process.env.NEXT_PUBLIC_CHECKER_URL || 'http://185.255.131.231:8000/api/v1';
 
 export function DashboardContent() {
@@ -33,32 +57,29 @@ export function DashboardContent() {
   const [isMultiChecking, setIsMultiChecking] = React.useState(false);
 
   // State for results
-  const [results, setResults] = React.useState({
-    groupsChecked: { current: 0, total: 0 },
-    validWithFilter: 0,
-    validOnly: 0,
-    topicsValid: 0,
-    channelsValid: 0,
-    invalid: 0,
-    accountIssues: 0,
-    joinRequests: 0,
+  const results: ResultsData = {
+    groupsChecked: { current: 15, total: 20 },
+    validWithFilter: 12,
+    validOnly: 10,
+    topicsValid: 8,
+    channelsValid: 7,
+    invalid: 3,
+    accountIssues: 1,
+    joinRequests: 2,
     entityTypes: {
-      group: 0,
-      channel: 0,
-      topic: 0
+      group: 15,
+      channel: 5,
+      topic: 3
     },
-    startedAt: null,
-    finishedAt: null
-  });
-
+    startedAt: '',
+    finishedAt: ''
+  };
   const [token, setToken] = React.useState<string | null>(null);
   React.useEffect(() => {
     const storedToken = localStorage.getItem('token');
     setToken(storedToken);
   }, []);
 
-
-  // State for met
 
   // State for recent activities
   const [activities, setActivities] = React.useState([
@@ -123,27 +144,6 @@ export function DashboardContent() {
       const statusData = await fetchCheckerStatus(checkerRunId);
       if (statusData && statusData.data) {
         const { data } = statusData;
-        setResults({
-          groupsChecked: {
-            current: data.checked_links || 0,
-            total: data.total_links || 0
-          },
-          validWithFilter: data.buckets?.valid_filtered || 0,
-          validOnly: data.buckets?.valid_only || 0,
-          topicsValid: data.buckets?.topics || 0,
-          channelsValid: data.buckets?.channels || 0,
-          invalid: data.buckets?.invalid || 0,
-          accountIssues: data.buckets?.account_issue || 0,
-          joinRequests: data.buckets?.join_request || 0,
-          entityTypes: {
-            group: data.entity_types?.group || 0,
-            channel: data.entity_types?.channel || 0,
-            topic: data.entity_types?.topic || 0
-          },
-          startedAt: data.started_at,
-          finishedAt: data.finished_at
-        });
-
         if (statusData.activities && statusData.activities.length > 0) {
           statusData.activities.forEach((activity: { message: any; type: any; }) => {
             addActivity(activity.message, activity.type);
@@ -534,7 +534,7 @@ export function DashboardContent() {
       </div>
 
       {/* Results Panel */}
-      <ResultsPanel results={results} activities={activities} />
+      <ResultsPanel results={results} />
     </div>
   );
 }

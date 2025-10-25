@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// components/TaskSettings.js
 import * as React from 'react';
 import { Box } from '@mui/material';
 import { FormControlLabel, Checkbox, TextField } from '@mui/material';
@@ -12,8 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { TaskSettingsModal } from './TaskSettingsModal';
 import CreateTaskModal from './CreateTaskModal';
 import TaskTable from './TaskTable';
-import { RefreshCw } from 'lucide-react';
-import LogsSection from './LogsSection';
+import LogViewer from './CheckerLogViewer';
 
 interface TaskSettingsData {
   accountId: string;
@@ -361,8 +359,14 @@ export function TaskSettings() {
       <TaskTable />
 
       {/* Global Settings */}
-      <LogsSection title='Live Forward Logs' />
-      <GlobalSettings />
+      <LogViewer
+        wsUrl="ws://185.255.131.231:8000/api/v1/logs/stream"
+        logName="forwarder_service.log"
+        title="Forwarder Service Logs"
+        maxLogs={200}
+        autoReconnect={true}
+        reconnectInterval={5000}
+      />      <GlobalSettings />
 
       {/* Create Task Modal */}
       <CreateTaskModal isOpen={isCreateTaskModalOpen} onClose={closeModal} />
