@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import React from 'react'
 import { Badge } from '@/components/ui/badge';
 import { Play, Square, Edit2, Trash2, MoreVertical } from 'lucide-react';
@@ -16,7 +18,7 @@ import TaskTableHeader from './TaskTableHeader';
 import { toast } from 'react-toastify';
 import AccountSettingModal from './AccountSettingModal';
 
-// Updated interface to include all properties used in the component
+
 interface TaskSettingsData {
     accountId: string;
     internalMin: number;
@@ -228,13 +230,10 @@ const TaskTable = () => {
 
     // Start polling for task status
     const startPolling = (taskId: string) => {
-        console.log(taskId, "taskkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-        // Clear any existing interval for this task
         if (pollingIntervals[taskId]) {
             clearInterval(pollingIntervals[taskId]);
         }
 
-        // Set up new polling interval
         const interval = setInterval(async () => {
             try {
                 const response = await fetch(`http://185.255.131.231:8000/api/v1/forwarder/task/${taskId}`, {
@@ -314,7 +313,7 @@ const TaskTable = () => {
         const task = tasks.find((t) => t.id === taskId);
         if (task) {
             const settings: TaskSettingsData = {
-                accountId: task.id, // This should be the actual account ID, not task ID
+                accountId: task.id,
                 internalMin: 20,
                 internalMax: 25,
                 afterEachForward: 360,
@@ -382,8 +381,6 @@ const TaskTable = () => {
     }, []);
 
     const handleDelete = async (taskId: string) => {
-        console.log('Delete task:', taskId);
-
         if (window.confirm('Are you sure you want to delete this task?')) {
             try {
                 // Show loading toast
@@ -631,7 +628,7 @@ const TaskTable = () => {
                     </>
                 )}
             </CardContent>
-            <AccountSettingModal 
+            <AccountSettingModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 taskSettings={taskSettings}

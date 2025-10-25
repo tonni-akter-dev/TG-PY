@@ -449,7 +449,6 @@ export function TaskSettings() {
       <TaskSettingsModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        taskSettings={taskSettings}
       />
     </div>
   );

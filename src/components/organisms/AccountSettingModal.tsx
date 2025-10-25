@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, TextField, Button, Grid, Divider, Tabs, Tab, IconButton, CircularProgress } from '@mui/material';
-import { XIcon, ClockIcon, MessageCircleIcon, SettingsIcon, EditIcon, PlusIcon, TrashIcon } from 'lucide-react';
+import { Modal, Box, Typography, TextField, Button, Divider, Tabs, Tab, IconButton, CircularProgress } from '@mui/material';
+import { X, MessageCircle, Settings, Edit, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,6 +10,7 @@ interface MessageGroup {
     target_groups: string[];
 }
 
+// Updated interface to match the one in TaskTable
 interface TaskSettingsData {
     accountId: string;
     internalMin: number;
@@ -29,17 +31,16 @@ interface TaskSettingsModalProps {
     isOpen: boolean;
     onClose: () => void;
     taskSettings: TaskSettingsData | null;
+    editMode?: boolean;
 }
 
-const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose, taskSettings }) => {
-    console.log(taskSettings, "ssdsdf")
+const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose, taskSettings}) => {
     const token = localStorage.getItem('token');
     const [loading, setLoading] = useState(false);
     const [accountSettingsLoading, setAccountSettingsLoading] = useState(false);
     const [taskDetailsLoading, setTaskDetailsLoading] = useState(false);
     const [tabValue, setTabValue] = useState(0);
     
-    // Initialize with empty values instead of hardcoded ones
     const [accountSettings, setAccountSettings] = useState({
         interval_min: 0,
         interval_max: 0,
@@ -55,7 +56,6 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
     });
     const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
 
-    // Fetch account settings when modal opens
     useEffect(() => {
         if (isOpen && taskSettings) {
             fetchAccountSettings();
@@ -330,9 +330,9 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                         <Typography variant="h6" component="h2">
                             Task Settings - {taskSettings.selectedTaskId}
                         </Typography>
-                        <Button onClick={onClose} sx={{ minWidth: 'auto', p: 1 }}>
-                            <XIcon size={20} />
-                        </Button>
+                        <IconButton onClick={onClose} sx={{ minWidth: 'auto', p: 1 }}>
+                            <X size={20} />
+                        </IconButton>
                     </Box>
 
                     {/* Tabs */}
@@ -349,7 +349,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                             /* Account Settings Tab */
                             <Box>
                                 <Typography variant="subtitle1" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
-                                    <SettingsIcon size={18} sx={{ mr: 1 }} />
+                                    <Settings size={18} style={{ marginRight: '8px' }} />
                                     Account Settings
                                 </Typography>
 
@@ -360,8 +360,8 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                     </Box>
                                 ) : (
                                     <>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={6}>
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                                            <Box sx={{ flex: '1 1 45%' }}>
                                                 <TextField
                                                     fullWidth
                                                     label="Interval Min (seconds)"
@@ -373,8 +373,8 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                                     variant="outlined"
                                                     size="small"
                                                 />
-                                            </Grid>
-                                            <Grid item xs={6}>
+                                            </Box>
+                                            <Box sx={{ flex: '1 1 45%' }}>
                                                 <TextField
                                                     fullWidth
                                                     label="Interval Max (seconds)"
@@ -386,8 +386,8 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                                     variant="outlined"
                                                     size="small"
                                                 />
-                                            </Grid>
-                                            <Grid item xs={6}>
+                                            </Box>
+                                            <Box sx={{ flex: '1 1 45%' }}>
                                                 <TextField
                                                     fullWidth
                                                     label="After Each Second"
@@ -399,8 +399,8 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                                     variant="outlined"
                                                     size="small"
                                                 />
-                                            </Grid>
-                                            <Grid item xs={6}>
+                                            </Box>
+                                            <Box sx={{ flex: '1 1 45%' }}>
                                                 <TextField
                                                     fullWidth
                                                     label="Random Sleep Min (seconds)"
@@ -412,8 +412,8 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                                     variant="outlined"
                                                     size="small"
                                                 />
-                                            </Grid>
-                                            <Grid item xs={6}>
+                                            </Box>
+                                            <Box sx={{ flex: '1 1 45%' }}>
                                                 <TextField
                                                     fullWidth
                                                     label="Random Sleep Max (seconds)"
@@ -425,8 +425,8 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                                     variant="outlined"
                                                     size="small"
                                                 />
-                                            </Grid>
-                                        </Grid>
+                                            </Box>
+                                        </Box>
 
                                         <Box sx={{ mt: 2 }}>
                                             <TextField
@@ -462,12 +462,12 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                             <Box>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                                     <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
-                                        <MessageCircleIcon size={18} sx={{ mr: 1 }} />
+                                        <MessageCircle size={18} style={{ marginRight: '8px' }} />
                                         Task Details
                                     </Typography>
                                     <Button
                                         variant="outlined"
-                                        startIcon={<EditIcon size={16} />}
+                                        startIcon={<Edit size={16} />}
                                         onClick={() => setIsEditTaskModalOpen(true)}
                                     >
                                         Edit Task
@@ -542,9 +542,9 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                         <Typography variant="h6" component="h2">
                             Edit Task - {taskSettings?.selectedTaskId}
                         </Typography>
-                        <Button onClick={() => setIsEditTaskModalOpen(false)} sx={{ minWidth: 'auto', p: 1 }}>
-                            <XIcon size={20} />
-                        </Button>
+                        <IconButton onClick={() => setIsEditTaskModalOpen(false)} sx={{ minWidth: 'auto', p: 1 }}>
+                            <X size={20} />
+                        </IconButton>
                     </Box>
 
                     {/* Content */}
@@ -567,7 +567,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                     <Typography variant="subtitle2">Message Group #{index + 1}</Typography>
                                     {taskData.message_groups.length > 1 && (
                                         <IconButton onClick={() => handleRemoveMessageGroup(index)} size="small">
-                                            <TrashIcon size={16} />
+                                            <Trash2 size={16} />
                                         </IconButton>
                                     )}
                                 </Box>
@@ -601,7 +601,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                                 size="small"
                                                 sx={{ ml: 0.5, p: 0.25 }}
                                             >
-                                                <XIcon size={12} />
+                                                <X size={12} />
                                             </IconButton>
                                         </Box>
                                     ))}
@@ -614,8 +614,9 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                                         placeholder="Add target group"
                                         onKeyPress={(e) => {
                                             if (e.key === 'Enter') {
-                                                handleAddTargetGroup(index, e.currentTarget.value);
-                                                e.currentTarget.value = '';
+                                                const target = e.target as HTMLInputElement;
+                                                handleAddTargetGroup(index, target.value);
+                                                target.value = '';
                                             }
                                         }}
                                     />
@@ -637,7 +638,7 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
 
                         <Button
                             variant="outlined"
-                            startIcon={<PlusIcon size={16} />}
+                            startIcon={<Plus size={16} />}
                             onClick={handleAddMessageGroup}
                             sx={{ mb: 3 }}
                         >
