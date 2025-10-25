@@ -6,7 +6,7 @@ function LogsSection({ title }: { title: string }) {
     const logs = ['[10:12:06] Forwarder system initialized'];
 
     return (
-        <Card className='border-border bg-card'>
+        <Card className='border-border bg-[#252139]'>
             <CardHeader className='px-6 py-4 border-b border-border flex justify-between items-center'>
                 <CardTitle className='text-foreground'>{title}</CardTitle>
                 <Button variant='outlined' size='small' className='h-6 w-6'>

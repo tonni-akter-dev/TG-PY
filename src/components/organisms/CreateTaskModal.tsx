@@ -8,6 +8,14 @@ interface Account {
     phone: string;
 }
 
+// Define an interface for the message block structure
+interface MessageBlock {
+    id: number;
+    messageLink: string;
+    targetGroups: string[];
+    newTargetGroup: string;
+}
+
 interface MessageGroup {
     message_link: string;
     target_groups: string[];
@@ -57,12 +65,12 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({ isOpen, onClose }) =>
     const [taskName, setTaskName] = useState('');
     const [selectedAccount, setSelectedAccount] = useState('');
 
-    // State for multiple message blocks
-    const [messageBlocks, setMessageBlocks] = useState([
+    // State for multiple message blocks, now explicitly typed
+    const [messageBlocks, setMessageBlocks] = useState<MessageBlock[]>([
         {
             id: 1,
             messageLink: 'https://t.me/channel/message_id',
-            targetGroups: ['@group1', '@group2', 'https://t.me/group3'],
+            targetGroups: [],
             newTargetGroup: ''
         }
     ]);

@@ -50,14 +50,13 @@ interface Task {
 const TaskTable = () => {
     const [token, setToken] = React.useState<string | null>(null);
 
-  // Get token from localStorage only on the client side
-  React.useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    setToken(storedToken);
-  }, []);
+    // Get token from localStorage only on the client side
+    React.useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken);
+    }, []);
 
-
-  // State for met
+    // State for met
     const [tasks, setTasks] = React.useState<Task[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -384,10 +383,12 @@ const TaskTable = () => {
         }
     };
 
-    // Fetch tasks on component mount
+    // Fetch tasks on component mount and when token changes
     React.useEffect(() => {
-        fetchTasks();
-    }, []);
+        if (token) {
+            fetchTasks();
+        }
+    }, [token]);
 
     const handleDelete = async (taskId: string) => {
         if (window.confirm('Are you sure you want to delete this task?')) {
@@ -478,19 +479,19 @@ const TaskTable = () => {
     };
 
     return (
-        <Card className='border-border bg-card'>
-            <CardHeader className='px-6 py-4 border-b border-border'>
+        <Card className='border-border w-full bg-white dark:bg-[#252139]'>
+            <CardHeader className='px-6 py-4 border-b border-border bg-white dark:bg-[#252139]'>
                 <CardTitle className='text-foreground'>Forwarding Tasks</CardTitle>
             </CardHeader>
-            <CardContent className='p-0'>
+            <CardContent className='p-0 bg-white dark:bg-[#252139]'>
                 {loading ? (
-                    <div className='flex justify-center items-center p-8'>
+                    <div className='flex justify-center items-center p-8 bg-white dark:bg-[#252139]'>
                         <Typography variant='body2' className='text-muted-foreground'>
                             Loading tasks...
                         </Typography>
                     </div>
                 ) : error ? (
-                    <div className='flex flex-col justify-center items-center p-8'>
+                    <div className='flex flex-col justify-center items-center p-8 bg-white dark:bg-[#252139]'>
                         <Typography variant='body2' className='text-red-600 mb-4'>
                             Error: {error}
                         </Typography>
@@ -500,23 +501,23 @@ const TaskTable = () => {
                     </div>
                 ) : (
                     <>
-                        <div className='overflow-x-auto'>
-                            <table className='w-full'>
+                        <div className='overflow-x-auto bg-white dark:bg-[#252139]'>
+                            <table className='w-full bg-white dark:bg-[#252139]'>
                                 <TaskTableHeader />
-                                <tbody className='divide-y divide-border'>
+                                <tbody className='divide-y divide-border bg-white dark:bg-[#252139]'>
                                     {tasks.map((task) => (
-                                        <tr key={task.id} className='hover:bg-accent/50 transition-colors'>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                        <tr key={task.id} className='hover:bg-accent/50 transition-colors bg-white dark:bg-[#252139]'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Typography variant='body2' className='text-muted-foreground'>
                                                     {task.id}
                                                 </Typography>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Typography variant='body2' className='font-medium text-foreground'>
                                                     {task.name}
                                                 </Typography>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Badge
                                                     variant={task.status === 'running' ? 'default' : 'secondary'}
                                                     className={
@@ -537,27 +538,27 @@ const TaskTable = () => {
                                                     )}
                                                 </Badge>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Typography variant='body2' className='text-muted-foreground'>
                                                     {task.current_index}/{task.total_messages}
                                                 </Typography>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Typography variant='body2' className='text-muted-foreground'>
                                                     {task.successful_forwards}
                                                 </Typography>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Typography variant='body2' className='text-muted-foreground'>
                                                     {task.failed_forwards}
                                                 </Typography>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <Typography variant='body2' className='text-muted-foreground'>
                                                     {formatDate(task.created_at)}
                                                 </Typography>
                                             </td>
-                                            <td className='px-6 py-4 whitespace-nowrap'>
+                                            <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
                                                 <div className='flex items-center space-x-2'>
                                                     <Button
                                                         variant='outlined'
@@ -623,7 +624,7 @@ const TaskTable = () => {
                         </div>
 
                         {/* Pagination */}
-                        <div className='flex justify-between items-center px-6 py-4 border-t border-border'>
+                        <div className='flex justify-between items-center px-6 py-4 border-t border-border bg-white dark:bg-[#252139]'>
                             <Typography variant='body2' className='text-muted-foreground'>
                                 Showing {tasks.length} of {pagination.total} tasks
                             </Typography>

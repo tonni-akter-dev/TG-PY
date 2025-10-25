@@ -101,7 +101,7 @@ function GlobalSettings() {
             sx={{ margin: 0, color: 'inherit' }}
           />
         </div>
-     
+
       </CardContent>
     </Card>
   );
@@ -182,7 +182,7 @@ export function TaskSettings() {
 
     } catch (err) {
       console.error('Error starting all tasks:', err);
-      
+
       // Show error toast
       toast.error(err instanceof Error ? err.message : 'Failed to start all tasks', {
         position: "top-right",
@@ -240,7 +240,7 @@ export function TaskSettings() {
 
     } catch (err) {
       console.error('Error stopping all tasks:', err);
-      
+
       toast.error(err instanceof Error ? err.message : 'Failed to stop all tasks', {
         position: "top-right",
         autoClose: 3000,
@@ -297,7 +297,7 @@ export function TaskSettings() {
 
     } catch (err) {
       console.error('Error continuing all tasks:', err);
-      
+
       toast.error(err instanceof Error ? err.message : 'Failed to continue all tasks', {
         position: "top-right",
         autoClose: 3000,
@@ -322,22 +322,22 @@ export function TaskSettings() {
         </Typography>
 
         <Box className='flex flex-wrap gap-2'>
-          <Button 
-            variant='outline' 
+          <Button
+            variant='outline'
             className='text-green-600 border-green-600'
             onClick={handleStartAllTasks}
           >
             Start All Tasks
           </Button>
-          <Button 
-            variant='outline' 
+          <Button
+            variant='outline'
             className='text-red-600 border-red-600'
             onClick={handleStopAllTasks}
           >
             Stop All Tasks
           </Button>
-          <Button 
-            variant='outline' 
+          <Button
+            variant='outline'
             className='text-blue-600 border-blue-600'
             onClick={handleContinueAllTasks}
           >
@@ -354,15 +354,7 @@ export function TaskSettings() {
         <Typography variant='h4' className='font-semibold text-foreground'>
           Tasks Details
         </Typography>
-        <Button
-          variant='outline'
-          onClick={handleRefresh}
-          disabled={loading}
-          className='flex items-center gap-2'
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
+
       </div>
 
       {/* Tasks Table */}

@@ -18,6 +18,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import AccountsTable from './AccountsTable';
+import LogsSocket from './LogsSocket';
 
 export function AccountManagement() {
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
@@ -289,15 +290,11 @@ export function AccountManagement() {
   return (
     <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
       <AccountsTable key={refreshTable} onRemoveAccount={handleRemoveAccount} />
+      <LogsSocket />
+
       <Box className="flex flex-wrap gap-2">
         <Button variant="outline" className="text-green-600 border-green-600" onClick={() => setIsAddModalOpen(true)}>
           Add Account
-        </Button>
-        <Button variant="outline" className="text-blue-600 border-blue-600">
-          Fix Selected
-        </Button>
-        <Button variant="outline" className="text-gray-600 border-gray-600">
-          Refresh Account Info
         </Button>
         <Button
           variant="outline"

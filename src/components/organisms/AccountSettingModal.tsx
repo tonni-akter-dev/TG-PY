@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button, Divider, Tabs, Tab, IconButton, CircularProgress } from '@mui/material';
@@ -34,17 +35,16 @@ interface TaskSettingsModalProps {
 
 
 const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose, taskSettings }) => {
-    console.log(taskSettings, "ttttttttttttttttttt")
     const [token, setToken] = React.useState<string | null>(null);
 
-  // Get token from localStorage only on the client side
-  React.useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    setToken(storedToken);
-  }, []);
+    // Get token from localStorage only on the client side
+    React.useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken);
+    }, []);
 
 
-  // State for met
+    // State for met
     const [loading, setLoading] = useState(false);
     const [accountSettingsLoading, setAccountSettingsLoading] = useState(false);
     const [taskDetailsLoading, setTaskDetailsLoading] = useState(false);
@@ -90,8 +90,6 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
             }
 
             const data = await response.json();
-            console.log('Account settings response:', data);
-
             if (data.status === 'success' && data.data) {
                 // Use the actual data from the API response
                 setAccountSettings({
@@ -104,7 +102,6 @@ const AccountSettingModal: React.FC<TaskSettingsModalProps> = ({ isOpen, onClose
                 });
             }
         } catch (err) {
-            console.error('Error fetching account settings:', err);
             toast.error('Failed to fetch account settings');
         } finally {
             setAccountSettingsLoading(false);
