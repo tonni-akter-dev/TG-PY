@@ -11,7 +11,7 @@ export default function LogsSocket(): JSX.Element {
     const wsRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
-        const url = 'ws://185.255.131.231:8000/api/v1/logs/files';
+        const url = 'ws://api.vipadtg.com/api/v1/logs/files';
         const ws = new WebSocket(url);
         wsRef.current = ws;
 

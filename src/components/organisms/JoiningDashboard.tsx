@@ -806,7 +806,7 @@ export function JoinManagement() {
       />
       {/* Logs Section */}
       <LogViewer
-        wsUrl='ws://185.255.131.231:8000/api/v1/logs/stream'
+        wsUrl='ws://api.vipadtg.com/api/v1/logs/stream'
         logName='joining_service.log'
         title='Joining Service Logs'
         maxLogs={200}
