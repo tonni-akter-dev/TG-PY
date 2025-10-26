@@ -37,7 +37,7 @@ interface ResultsData {
   startedAt: string | number | Date;
   finishedAt: string | number | Date;
 }
-const CHECKER_API_URL = process.env.NEXT_PUBLIC_CHECKER_URL || 'http://185.255.131.231:8000/api/v1';
+const CHECKER_API_URL = process.env.NEXT_PUBLIC_CHECKER_URL || 'https://api.vipadtg.com/api/v1';
 
 export function DashboardContent() {
   // State for metrics
@@ -80,7 +80,6 @@ export function DashboardContent() {
     setToken(storedToken);
   }, []);
 
-
   // State for recent activities
   const [activities, setActivities] = React.useState([
     {
@@ -95,7 +94,8 @@ export function DashboardContent() {
     },
     {
       timestamp: '[2025-10-06 10:12:06]',
-      message: '⚠️ Sync warning: AccountManager object has no attribute \'get_accounts\' (continuing...)',
+      message:
+        "⚠️ Sync warning: AccountManager object has no attribute 'get_accounts' (continuing...)",
       type: 'warning'
     }
   ]);
@@ -106,18 +106,18 @@ export function DashboardContent() {
   // Function to add activity
   const addActivity = (message: string, type: string) => {
     const timestamp = `[${new Date().toISOString().replace('T', ' ').substring(0, 19)}]`;
-    setActivities(prev => [{ timestamp, message, type }, ...prev].slice(0, 10));
+    setActivities((prev) => [{ timestamp, message, type }, ...prev].slice(0, 10));
   };
 
   // Function to fetch checker status by ID
   const fetchCheckerStatus = async (checkerRunId: any) => {
-    console.log(checkerRunId, "checker run id");
+    console.log(checkerRunId, 'checker run id');
     try {
       const response = await fetch(`${CHECKER_API_URL}/checker/status/${checkerRunId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         }
       });
       if (!response.ok) {
@@ -145,7 +145,7 @@ export function DashboardContent() {
       if (statusData && statusData.data) {
         const { data } = statusData;
         if (statusData.activities && statusData.activities.length > 0) {
-          statusData.activities.forEach((activity: { message: any; type: any; }) => {
+          statusData.activities.forEach((activity: { message: any; type: any }) => {
             addActivity(activity.message, activity.type);
           });
         }
@@ -193,8 +193,8 @@ export function DashboardContent() {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
@@ -205,7 +205,9 @@ export function DashboardContent() {
 
       // Update metrics with response data
       setMetrics({
-        activeAccounts: data.active_accounts ? data.active_accounts.toString() : metrics.activeAccounts,
+        activeAccounts: data.active_accounts
+          ? data.active_accounts.toString()
+          : metrics.activeAccounts,
         totalAccounts: data.total_accounts ? data.total_accounts.toString() : metrics.totalAccounts,
         lastSync: new Date().toLocaleString()
       });
@@ -227,14 +229,14 @@ export function DashboardContent() {
     }
     setIsChecking(true);
     setCheckerStatus('running');
-    const links = groupLinks.split('\n').filter(link => link.trim());
+    const links = groupLinks.split('\n').filter((link) => link.trim());
 
     try {
       const response = await fetch(`${CHECKER_API_URL}/checker/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           mode: 'single',
@@ -275,7 +277,7 @@ export function DashboardContent() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -288,7 +290,6 @@ export function DashboardContent() {
 
       stopPolling();
       toast.success(`Checker stopped: ${data.message}`);
-
     } finally {
       setIsChecking(false);
       setCheckerStatus('stopped');
@@ -305,14 +306,14 @@ export function DashboardContent() {
     setIsMultiChecking(true);
     addActivity('🚀 Starting Multi Checker...', 'info');
 
-    const links = groupLinks.split('\n').filter(link => link.trim());
+    const links = groupLinks.split('\n').filter((link) => link.trim());
 
     try {
       const response = await fetch(`${CHECKER_API_URL}/checker/task/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           mode: 'multi',
@@ -358,7 +359,7 @@ export function DashboardContent() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -378,13 +379,14 @@ export function DashboardContent() {
     }
   };
 
-
   return (
     <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
       <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6'>
         <Card className='border-border bg-card hover:bg-accent/50 transition-colors'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium text-muted-foreground'>Active Accounts</CardTitle>
+            <CardTitle className='text-sm font-medium text-muted-foreground'>
+              Active Accounts
+            </CardTitle>
             <Users className='h-4 w-4 text-blue-500' />
           </CardHeader>
           <CardContent>
@@ -393,7 +395,9 @@ export function DashboardContent() {
         </Card>
         <Card className='border-border bg-card hover:bg-accent/50 transition-colors'>
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-            <CardTitle className='text-sm font-medium text-muted-foreground'>Total Accounts</CardTitle>
+            <CardTitle className='text-sm font-medium text-muted-foreground'>
+              Total Accounts
+            </CardTitle>
             <UserCheck className='h-4 w-4 text-green-500' />
           </CardHeader>
           <CardContent>
@@ -414,14 +418,10 @@ export function DashboardContent() {
       <div>
         <Typography className='text-foreground'>Quick Actions</Typography>
         <div className='mt-2 flex flex-wrap gap-4 items-center space-x-2'>
-          <Button
-            onClick={syncAccounts}
-            disabled={isSyncing}
-            className="flex items-center gap-2"
-          >
+          <Button onClick={syncAccounts} disabled={isSyncing} className='flex items-center gap-2'>
             {isSyncing ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
                 Syncing...
               </>
             ) : (
@@ -432,16 +432,16 @@ export function DashboardContent() {
           <Button
             onClick={startChecker}
             disabled={isChecking || checkerStatus === 'running'}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
             {checkerStatus === 'running' ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
                 Running...
               </>
             ) : (
               <>
-                <Play className="w-4 h-4" />
+                <Play className='w-4 h-4' />
                 Start Checker
               </>
             )}
@@ -450,19 +450,19 @@ export function DashboardContent() {
           <Button
             onClick={stopChecker}
             disabled={checkerStatus !== 'running'}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
-            <Square className="w-4 h-4" />
+            <Square className='w-4 h-4' />
             Stop Checker
           </Button>
           <Button
             onClick={taskChecker}
             disabled={isMultiChecking}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
             {isMultiChecking ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
                 Starting...
               </>
             ) : (
@@ -473,12 +473,11 @@ export function DashboardContent() {
           <Button
             onClick={stopTaskChecker}
             disabled={!multiRunId}
-            className="flex items-center gap-2"
+            className='flex items-center gap-2'
           >
-            <Square className="w-4 h-4" />
+            <Square className='w-4 h-4' />
             Stop Task Checker
           </Button>
-
         </div>
       </div>
 
@@ -510,24 +509,24 @@ export function DashboardContent() {
                 borderColor: 'hsl(var(--primary))'
               },
               '& .MuiInputBase-input::placeholder': {
-                color: 'hsl(var(--muted-foreground))',
-              },
+                color: 'hsl(var(--muted-foreground))'
+              }
             },
             '& .MuiInputLabel-root': {
               color: 'hsl(var(--muted-foreground))'
             },
             '& .MuiInputLabel-root.Mui-focused': {
               color: 'hsl(var(--primary))'
-            },
+            }
           }}
         />
         <Typography className='mt-0 text-foreground flex items-center gap-2'>
           Currently Analyzing
           {checkerStatus === 'running' && (
-            <span className="flex items-center gap-1">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className='flex items-center gap-1'>
+              <div className='w-2 h-2 bg-green-500 rounded-full animate-pulse'></div>
               Run ID: {runId}
-              {pollingInterval && <span className="text-xs text-muted-foreground">(Polling)</span>}
+              {pollingInterval && <span className='text-xs text-muted-foreground'>(Polling)</span>}
             </span>
           )}
         </Typography>

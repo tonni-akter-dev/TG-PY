@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { Box } from '@mui/material';
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/atoms/Button';
 import { Typography } from '@/components/atoms/Typography';
@@ -35,7 +30,7 @@ export function LogViewer() {
   React.useEffect(() => {
     const fetchLogTypes = async () => {
       try {
-        const response = await fetch('http://185.255.131.231:8000/api/v1/logs');
+        const response = await fetch('https://api.vipadtg.com/api/v1/logs');
         if (response.ok) {
           const logTypes = await response.json();
           setAvailableLogTypes(logTypes);
@@ -81,7 +76,7 @@ export function LogViewer() {
       try {
         // Parse the log data
         const logData = JSON.parse(event.data);
-        
+
         // Create a new log entry
         const newLog: LogEntry = {
           timestamp: logData.timestamp || new Date().toLocaleString(),
@@ -89,9 +84,9 @@ export function LogViewer() {
           level: logData.level || 'Info',
           message: logData.message || event.data
         };
-        
+
         // Update logs with new entry
-        setLogs(prevLogs => {
+        setLogs((prevLogs) => {
           const updatedLogs = [newLog, ...prevLogs];
           // Keep only the latest logs
           return updatedLogs.slice(0, maxLogs);
@@ -104,8 +99,8 @@ export function LogViewer() {
           level: 'Info',
           message: event.data
         };
-        
-        setLogs(prevLogs => {
+
+        setLogs((prevLogs) => {
           const updatedLogs = [newLog, ...prevLogs];
           return updatedLogs.slice(0, maxLogs);
         });
@@ -140,9 +135,7 @@ export function LogViewer() {
   }, [logType]);
 
   // Filter logs based on selected level
-  const filteredLogs = logs.filter(log => 
-    filterLevel === 'All' || log.level === filterLevel
-  );
+  const filteredLogs = logs.filter((log) => filterLevel === 'All' || log.level === filterLevel);
 
   // Clear all logs
   const clearLogs = () => {
@@ -153,11 +146,11 @@ export function LogViewer() {
     <Card className='border-border bg-card '>
       <CardHeader className='px-6 py-4 border-b border-border flex flex-row items-center justify-between'>
         <CardTitle className='text-foreground'>Logs</CardTitle>
-        <div className="flex items-center gap-2">
+        <div className='flex items-center gap-2'>
           <span className={`text-sm ${isConnected ? 'text-green-500' : 'text-red-500'}`}>
             {isConnected ? '● Connected' : '● Disconnected'}
           </span>
-          <Button variant="outline" size="sm" onClick={clearLogs}>
+          <Button variant='outline' size='sm' onClick={clearLogs}>
             Clear Logs
           </Button>
         </div>
@@ -165,8 +158,8 @@ export function LogViewer() {
       <CardContent className='p-6 space-y-4'>
         {/* Connection Error */}
         {connectionError && (
-          <Box className="p-3 bg-red-50 dark:bg-red-900/20 rounded-md">
-            <Typography variant="small" className="text-red-500">
+          <Box className='p-3 bg-red-50 dark:bg-red-900/20 rounded-md'>
+            <Typography variant='small' className='text-red-500'>
               {connectionError}
             </Typography>
           </Box>
@@ -174,57 +167,61 @@ export function LogViewer() {
 
         {/* Filters */}
         <Box className='flex items-center gap-4'>
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 180 }}>
+          <FormControl variant='outlined' size='small' sx={{ minWidth: 180 }}>
             <InputLabel sx={{ color: 'hsl(var(--muted-foreground))' }}>Log Type</InputLabel>
             <Select
               value={logType}
               onChange={(e) => setLogType(e.target.value)}
-              label="Log Type"
-              sx={{ 
+              label='Log Type'
+              sx={{
                 color: 'hsl(var(--foreground))',
                 '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'hsl(var(--border))',
+                  borderColor: 'hsl(var(--border))'
                 },
                 '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'hsl(var(--primary))',
+                  borderColor: 'hsl(var(--primary))'
                 },
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'hsl(var(--primary))',
+                  borderColor: 'hsl(var(--primary))'
                 },
                 '& .MuiSvgIcon-root': {
-                  color: 'hsl(var(--muted-foreground))',
-                },
+                  color: 'hsl(var(--muted-foreground))'
+                }
               }}
             >
               {availableLogTypes.map((type) => (
-                <MenuItem key={type} value={type} sx={{ color: 'hsl(var(--foreground))' }}>{type}</MenuItem>
+                <MenuItem key={type} value={type} sx={{ color: 'hsl(var(--foreground))' }}>
+                  {type}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormControl variant="outlined" size="small" sx={{ minWidth: 120 }}>
+          <FormControl variant='outlined' size='small' sx={{ minWidth: 120 }}>
             <InputLabel sx={{ color: 'hsl(var(--muted-foreground))' }}>Filter Level</InputLabel>
             <Select
               value={filterLevel}
               onChange={(e) => setFilterLevel(e.target.value)}
-              label="Filter Level"
-              sx={{ 
+              label='Filter Level'
+              sx={{
                 color: 'hsl(var(--foreground))',
                 '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'hsl(var(--border))',
+                  borderColor: 'hsl(var(--border))'
                 },
                 '&:hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'hsl(var(--primary))',
+                  borderColor: 'hsl(var(--primary))'
                 },
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'hsl(var(--primary))',
+                  borderColor: 'hsl(var(--primary))'
                 },
                 '& .MuiSvgIcon-root': {
-                  color: 'hsl(var(--muted-foreground))',
-                },
+                  color: 'hsl(var(--muted-foreground))'
+                }
               }}
             >
               {filterLevels.map((level) => (
-                <MenuItem key={level} value={level} sx={{ color: 'hsl(var(--foreground))' }}>{level}</MenuItem>
+                <MenuItem key={level} value={level} sx={{ color: 'hsl(var(--foreground))' }}>
+                  {level}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -273,13 +270,17 @@ export function LogViewer() {
                     </td>
                     <td className='px-6 py-4 whitespace-nowrap'>
                       <Badge
-                        variant={log.level === 'ERROR' || log.level === 'Critical' ? 'destructive' : 'secondary'}
+                        variant={
+                          log.level === 'ERROR' || log.level === 'Critical'
+                            ? 'destructive'
+                            : 'secondary'
+                        }
                         className={
                           log.level === 'ERROR' || log.level === 'Critical'
                             ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                             : log.level === 'Warning'
-                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
+                              ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
+                              : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
                         }
                       >
                         {log.level}

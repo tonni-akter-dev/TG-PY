@@ -4,11 +4,7 @@
 'use client';
 import * as React from 'react';
 import { Box } from '@mui/material';
-import {
-  FormControlLabel,
-  Checkbox,
-  Slider,
-} from '@mui/material';
+import { FormControlLabel, Checkbox, Slider } from '@mui/material';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/atoms/Button';
 import { Typography } from '@/components/atoms/Typography';
@@ -27,7 +23,6 @@ interface Task {
   id: number;
   name: string;
   account_phone: string;
-
 }
 
 interface TaskApiResponse {
@@ -57,28 +52,36 @@ function GlobalJoinSettings() {
           </Typography>
           <Box className='space-y-2'>
             <Box className='flex justify-between items-center'>
-              <Typography variant='body' className='text-muted-foreground'>Min</Typography>
-              <Typography variant='body' className='text-foreground'>{minDelay} sec</Typography>
+              <Typography variant='body' className='text-muted-foreground'>
+                Min
+              </Typography>
+              <Typography variant='body' className='text-foreground'>
+                {minDelay} sec
+              </Typography>
             </Box>
             <Slider
               value={minDelay}
               onChange={(_, value) => setMinDelay(value as number)}
               min={0}
               max={300}
-              valueLabelDisplay="auto"
+              valueLabelDisplay='auto'
               sx={{ color: 'hsl(var(--primary))' }}
             />
           </Box>
           <Box className='flex justify-between items-center'>
-            <Typography variant='body' className='text-muted-foreground'>Max</Typography>
-            <Typography variant='body' className='text-foreground'>{maxDelay} sec</Typography>
+            <Typography variant='body' className='text-muted-foreground'>
+              Max
+            </Typography>
+            <Typography variant='body' className='text-foreground'>
+              {maxDelay} sec
+            </Typography>
           </Box>
           <Slider
             value={maxDelay}
             onChange={(_, value) => setMaxDelay(value as number)}
             min={0}
             max={300}
-            valueLabelDisplay="auto"
+            valueLabelDisplay='auto'
             sx={{ color: 'hsl(var(--primary))' }}
           />
         </div>
@@ -91,8 +94,8 @@ function GlobalJoinSettings() {
                 sx={{
                   color: 'rgb(59 130 246)',
                   '&.Mui-checked': {
-                    color: 'rgb(59 130 246)',
-                  },
+                    color: 'rgb(59 130 246)'
+                  }
                 }}
               />
             }
@@ -111,8 +114,8 @@ function GlobalJoinSettings() {
                 sx={{
                   color: 'rgb(59 130 246)',
                   '&.Mui-checked': {
-                    color: 'rgb(59 130 246)',
-                  },
+                    color: 'rgb(59 130 246)'
+                  }
                 }}
               />
             }
@@ -131,8 +134,8 @@ function GlobalJoinSettings() {
                 sx={{
                   color: 'rgb(59 130 246)',
                   '&.Mui-checked': {
-                    color: 'rgb(59 130 246)',
-                  },
+                    color: 'rgb(59 130 246)'
+                  }
                 }}
               />
             }
@@ -151,8 +154,8 @@ function GlobalJoinSettings() {
                 sx={{
                   color: 'rgb(59 130 246)',
                   '&.Mui-checked': {
-                    color: 'rgb(59 130 246)',
-                  },
+                    color: 'rgb(59 130 246)'
+                  }
                 }}
               />
             }
@@ -192,7 +195,9 @@ export function JoinManagement() {
   const [stoppingTasks, setStoppingTasks] = React.useState<Set<number>>(new Set());
 
   // State for polling
-  const [pollingIntervals, setPollingIntervals] = React.useState<{ [key: number]: NodeJS.Timeout }>({});
+  const [pollingIntervals, setPollingIntervals] = React.useState<{ [key: number]: NodeJS.Timeout }>(
+    {}
+  );
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -200,7 +205,7 @@ export function JoinManagement() {
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = React.useState(false);
 
   // Base URL for API
-  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://185.255.131.231:8000';
+  const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api.vipadtg.com';
 
   // Fetch a single task by ID
   const fetchTaskById = async (taskId: number): Promise<Task | null> => {
@@ -214,8 +219,8 @@ export function JoinManagement() {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
@@ -242,23 +247,19 @@ export function JoinManagement() {
       const updatedTask = await fetchTaskById(taskId);
       if (updatedTask) {
         // Update the task in the state
-        setTasks(prevTasks =>
-          prevTasks.map(task =>
-            task.id === taskId ? updatedTask : task
-          )
-        );
+        setTasks((prevTasks) => prevTasks.map((task) => (task.id === taskId ? updatedTask : task)));
 
         // Check if task is done, if so, stop polling
         if (updatedTask.status === 'done' || updatedTask.status === 'completed') {
           clearInterval(intervalId);
-          setPollingIntervals(prev => {
+          setPollingIntervals((prev) => {
             const newIntervals = { ...prev };
             delete newIntervals[taskId];
             return newIntervals;
           });
 
           // Remove from starting tasks set when done
-          setStartingTasks(prev => {
+          setStartingTasks((prev) => {
             const newSet = new Set(prev);
             newSet.delete(taskId);
             return newSet;
@@ -268,7 +269,7 @@ export function JoinManagement() {
     }, 5000); // Poll every 5 seconds
 
     // Store the interval ID
-    setPollingIntervals(prev => ({
+    setPollingIntervals((prev) => ({
       ...prev,
       [taskId]: intervalId
     }));
@@ -278,7 +279,7 @@ export function JoinManagement() {
   const stopPollingTask = (taskId: number) => {
     if (pollingIntervals[taskId]) {
       clearInterval(pollingIntervals[taskId]);
-      setPollingIntervals(prev => {
+      setPollingIntervals((prev) => {
         const newIntervals = { ...prev };
         delete newIntervals[taskId];
         return newIntervals;
@@ -287,46 +288,49 @@ export function JoinManagement() {
   };
 
   // Fetch tasks from API
-  const fetchTasks = React.useCallback(async (page: number = 1) => {
-    setLoading(true);
-    setError(null);
+  const fetchTasks = React.useCallback(
+    async (page: number = 1) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('Authentication token not found');
-      }
-      const response = await fetch(`${BASE_URL}/api/v1/joining/task?size=10&page=${page}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result: TaskApiResponse = await response.json();
-      setTasks(result.data?.items);
-      setCurrentPage(result.page);
-      setTotalPages(result.totalPages);
-      setTotalTasks(result.total);
-
-      // Check if any tasks are running and need to be polled
-      result.data?.items.forEach((task: Task) => {
-        if (task.status === 'running' && !pollingIntervals[task.id]) {
-          startPollingTask(task.id);
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Authentication token not found');
         }
-      });
-    } catch (err: any) {
-      console.error("Failed to fetch tasks:", err);
-      setError(err.message || "Failed to fetch tasks");
-    } finally {
-      setLoading(false);
-    }
-  }, [BASE_URL, pollingIntervals]);
+        const response = await fetch(`${BASE_URL}/api/v1/joining/task?size=10&page=${page}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result: TaskApiResponse = await response.json();
+        setTasks(result.data?.items);
+        setCurrentPage(result.page);
+        setTotalPages(result.totalPages);
+        setTotalTasks(result.total);
+
+        // Check if any tasks are running and need to be polled
+        result.data?.items.forEach((task: Task) => {
+          if (task.status === 'running' && !pollingIntervals[task.id]) {
+            startPollingTask(task.id);
+          }
+        });
+      } catch (err: any) {
+        console.error('Failed to fetch tasks:', err);
+        setError(err.message || 'Failed to fetch tasks');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [BASE_URL, pollingIntervals]
+  );
 
   // Initial fetch
   React.useEffect(() => {
@@ -336,7 +340,7 @@ export function JoinManagement() {
   // Clean up intervals on unmount
   React.useEffect(() => {
     return () => {
-      Object.values(pollingIntervals).forEach(interval => clearInterval(interval));
+      Object.values(pollingIntervals).forEach((interval) => clearInterval(interval));
     };
   }, [pollingIntervals]);
 
@@ -344,7 +348,7 @@ export function JoinManagement() {
   const handleStart = async (taskId: number) => {
     if (startingTasks.has(taskId)) return;
 
-    setStartingTasks(prev => new Set(prev).add(taskId));
+    setStartingTasks((prev) => new Set(prev).add(taskId));
 
     try {
       const token = localStorage.getItem('token');
@@ -357,8 +361,8 @@ export function JoinManagement() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
@@ -369,16 +373,14 @@ export function JoinManagement() {
       startPollingTask(taskId);
 
       // Update the task status immediately
-      setTasks(prevTasks =>
-        prevTasks.map(task =>
-          task.id === taskId ? { ...task, status: 'running' } : task
-        )
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === taskId ? { ...task, status: 'running' } : task))
       );
     } catch (err: any) {
-      console.error("Failed to start task:", err);
-      setError(err.message || "Failed to start task");
+      console.error('Failed to start task:', err);
+      setError(err.message || 'Failed to start task');
       // Remove from starting tasks set on error
-      setStartingTasks(prev => {
+      setStartingTasks((prev) => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
         return newSet;
@@ -391,7 +393,7 @@ export function JoinManagement() {
     if (stoppingTasks.has(taskId)) return;
 
     // Add to stopping tasks set
-    setStoppingTasks(prev => new Set(prev).add(taskId));
+    setStoppingTasks((prev) => new Set(prev).add(taskId));
 
     try {
       const token = localStorage.getItem('token');
@@ -404,8 +406,8 @@ export function JoinManagement() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
@@ -416,17 +418,15 @@ export function JoinManagement() {
       stopPollingTask(taskId);
 
       // Update the task status immediately
-      setTasks(prevTasks =>
-        prevTasks.map(task =>
-          task.id === taskId ? { ...task, status: 'stopped' } : task
-        )
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === taskId ? { ...task, status: 'stopped' } : task))
       );
     } catch (err: any) {
-      console.error("Failed to stop task:", err);
-      setError(err.message || "Failed to stop task");
+      console.error('Failed to stop task:', err);
+      setError(err.message || 'Failed to stop task');
     } finally {
       // Remove from stopping tasks set
-      setStoppingTasks(prev => {
+      setStoppingTasks((prev) => {
         const newSet = new Set(prev);
         newSet.delete(taskId);
         return newSet;
@@ -447,9 +447,9 @@ export function JoinManagement() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ task_ids: ["ALL"] })
+        body: JSON.stringify({ task_ids: ['ALL'] })
       });
 
       if (!response.ok) {
@@ -457,8 +457,8 @@ export function JoinManagement() {
       }
       fetchTasks(currentPage);
     } catch (err: any) {
-      console.error("Failed to start all tasks:", err);
-      setError(err.message || "Failed to start all tasks");
+      console.error('Failed to start all tasks:', err);
+      setError(err.message || 'Failed to start all tasks');
     } finally {
       setStartActionLoading(false);
     }
@@ -476,9 +476,9 @@ export function JoinManagement() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ task_ids: ["ALL"] })
+        body: JSON.stringify({ task_ids: ['ALL'] })
       });
 
       if (!response.ok) {
@@ -486,15 +486,15 @@ export function JoinManagement() {
       }
 
       // Stop all polling intervals
-      Object.keys(pollingIntervals).forEach(taskId => {
+      Object.keys(pollingIntervals).forEach((taskId) => {
         stopPollingTask(Number(taskId));
       });
 
       // Refresh tasks to get updated status
       fetchTasks(currentPage);
     } catch (err: any) {
-      console.error("Failed to stop all tasks:", err);
-      setError(err.message || "Failed to stop all tasks");
+      console.error('Failed to stop all tasks:', err);
+      setError(err.message || 'Failed to stop all tasks');
     } finally {
       setBulkActionLoading(false);
     }
@@ -513,8 +513,8 @@ export function JoinManagement() {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
+            Authorization: `Bearer ${token}`
+          }
         });
 
         if (!response.ok) {
@@ -527,8 +527,8 @@ export function JoinManagement() {
         // Refresh tasks after deletion
         fetchTasks(currentPage);
       } catch (err: any) {
-        console.error("Failed to delete task:", err);
-        setError(err.message || "Failed to delete task");
+        console.error('Failed to delete task:', err);
+        setError(err.message || 'Failed to delete task');
       }
     }
   };
@@ -581,32 +581,33 @@ export function JoinManagement() {
   return (
     <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
       {/* Global Controls */}
-      <Box className="border border-gray-500 rounded-lg p-4">
-        <Typography
-          variant="h6"
-          className="mb-4 font-medium text-gray-900 dark:text-white"
-        >
+      <Box className='border border-gray-500 rounded-lg p-4'>
+        <Typography variant='h6' className='mb-4 font-medium text-gray-900 dark:text-white'>
           Global Controls
         </Typography>
 
-        <Box className="flex flex-wrap gap-2">
+        <Box className='flex flex-wrap gap-2'>
           <Button
-            variant="outline"
-            className="text-green-600 border-green-600"
+            variant='outline'
+            className='text-green-600 border-green-600'
             onClick={handleStartAll}
             disabled={startActionLoading}
           >
             {startActionLoading ? 'Starting...' : 'Start All Tasks'}
           </Button>
           <Button
-            variant="outline"
-            className="text-red-600 border-red-600"
+            variant='outline'
+            className='text-red-600 border-red-600'
             onClick={handleStopAll}
             disabled={bulkActionLoading}
           >
             {bulkActionLoading ? 'Stopping...' : 'Stop All Tasks'}
           </Button>
-          <Button variant="outline" onClick={openModal} className="text-indigo-600 border-indigo-600">
+          <Button
+            variant='outline'
+            onClick={openModal}
+            className='text-indigo-600 border-indigo-600'
+          >
             Create New Task
           </Button>
         </Box>
@@ -669,7 +670,6 @@ export function JoinManagement() {
                       <th className='px-6 py-4 text-sm font-medium text-muted-foreground uppercase tracking-wider'>
                         Actions
                       </th>
-
                     </tr>
                   </thead>
                   <tbody className='divide-y divide-border'>
@@ -699,10 +699,11 @@ export function JoinManagement() {
                                 : task.status === 'done' || task.status === 'completed'
                                   ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300'
                                   : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
-                            }>
+                            }
+                          >
                             {task.status}
                             {pollingIntervals[task.id] && (
-                              <span className="ml-1 inline-block h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+                              <span className='ml-1 inline-block h-2 w-2 rounded-full bg-green-500 animate-pulse'></span>
                             )}
                           </Badge>
                         </td>
@@ -759,7 +760,6 @@ export function JoinManagement() {
                             </Button>
                           </div>
                         </td>
-
                       </tr>
                     ))}
                   </tbody>
@@ -806,9 +806,9 @@ export function JoinManagement() {
       />
       {/* Logs Section */}
       <LogViewer
-        wsUrl="ws://185.255.131.231:8000/api/v1/logs/stream"
-        logName="joining_service.log"
-        title="Joining Service Logs"
+        wsUrl='ws://185.255.131.231:8000/api/v1/logs/stream'
+        logName='joining_service.log'
+        title='Joining Service Logs'
         maxLogs={200}
         autoReconnect={true}
         reconnectInterval={5000}
@@ -819,22 +819,22 @@ export function JoinManagement() {
 }
 
 function LogsSection({ title }: { title: string }) {
-  const logs = [
-    '[10:12] [Join] system initialized',
-  ];
+  const logs = ['[10:12] [Join] system initialized'];
 
   return (
     <Card className='border-border bg-card'>
       <CardHeader className='px-6 py-4 border-b border-border flex justify-between items-center'>
         <CardTitle className='text-foreground'>{title}</CardTitle>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <MoreHorizontal className="h-4 w-4" />
+        <Button variant='ghost' size='icon' className='h-6 w-6'>
+          <MoreHorizontal className='h-4 w-4' />
         </Button>
       </CardHeader>
       <CardContent className='p-0'>
         <div className='h-48 overflow-y-auto bg-black text-green-400 p-4 font-mono text-sm'>
           {logs.map((log, index) => (
-            <div key={index} className='mb-1'>{log}</div>
+            <div key={index} className='mb-1'>
+              {log}
+            </div>
           ))}
         </div>
       </CardContent>

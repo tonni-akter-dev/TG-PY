@@ -99,7 +99,6 @@ function GlobalSettings() {
             sx={{ margin: 0, color: 'inherit' }}
           />
         </div>
-
       </CardContent>
     </Card>
   );
@@ -115,7 +114,6 @@ export function TaskSettings() {
     const storedToken = localStorage.getItem('token');
     setToken(storedToken);
   }, []);
-
 
   // State for met
 
@@ -141,24 +139,24 @@ export function TaskSettings() {
     try {
       // Show loading toast
       const toastId = toast.loading('Starting all tasks...', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: false,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
 
       // Call the bulk start API
-      const response = await fetch(`http://185.255.131.231:8000/api/v1/forwarder/tasks/bulk/start`, {
+      const response = await fetch(`https://api.vipadtg.com/api/v1/forwarder/tasks/bulk/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          task_ids: ["ALL"]
+          task_ids: ['ALL']
         })
       });
 
@@ -168,28 +166,27 @@ export function TaskSettings() {
 
       const data = await response.json();
       toast.update(toastId, {
-        render: "All tasks started successfully!",
-        type: "success",
+        render: 'All tasks started successfully!',
+        type: 'success',
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 3000
       });
 
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-
     } catch (err) {
       console.error('Error starting all tasks:', err);
 
       // Show error toast
       toast.error(err instanceof Error ? err.message : 'Failed to start all tasks', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
     }
   };
@@ -198,23 +195,23 @@ export function TaskSettings() {
   const handleStopAllTasks = async () => {
     try {
       const toastId = toast.loading('Stopping all tasks...', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: false,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
 
-      const response = await fetch(`http://185.255.131.231:8000/api/v1/forwarder/tasks/bulk/stop`, {
+      const response = await fetch(`https://api.vipadtg.com/api/v1/forwarder/tasks/bulk/stop`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          task_ids: ["ALL"]
+          task_ids: ['ALL']
         })
       });
 
@@ -226,27 +223,26 @@ export function TaskSettings() {
       console.log('Bulk stop tasks response:', data);
 
       toast.update(toastId, {
-        render: "All tasks stopped successfully!",
-        type: "success",
+        render: 'All tasks stopped successfully!',
+        type: 'success',
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 3000
       });
 
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-
     } catch (err) {
       console.error('Error stopping all tasks:', err);
 
       toast.error(err instanceof Error ? err.message : 'Failed to stop all tasks', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
     }
   };
@@ -255,23 +251,23 @@ export function TaskSettings() {
   const handleContinueAllTasks = async () => {
     try {
       const toastId = toast.loading('Continuing all tasks...', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: false,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
 
-      const response = await fetch(`http://185.255.131.231:8000/api/v1/forwarder/tasks/bulk/continue`, {
+      const response = await fetch(`https://api.vipadtg.com/api/v1/forwarder/tasks/bulk/continue`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          task_ids: ["ALL"]
+          task_ids: ['ALL']
         })
       });
 
@@ -283,27 +279,26 @@ export function TaskSettings() {
       console.log('Bulk continue tasks response:', data);
 
       toast.update(toastId, {
-        render: "All tasks continued successfully!",
-        type: "success",
+        render: 'All tasks continued successfully!',
+        type: 'success',
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 3000
       });
 
       setTimeout(() => {
         window.location.reload();
       }, 1000);
-
     } catch (err) {
       console.error('Error continuing all tasks:', err);
 
       toast.error(err instanceof Error ? err.message : 'Failed to continue all tasks', {
-        position: "top-right",
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
+        progress: undefined
       });
     }
   };
@@ -312,10 +307,7 @@ export function TaskSettings() {
     <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
       {/* Global Controls */}
       <Box className='border border-gray-500 rounded-lg p-4'>
-        <Typography
-          variant="h6"
-          className="mb-4 font-medium text-gray-900 dark:text-white"
-        >
+        <Typography variant='h6' className='mb-4 font-medium text-gray-900 dark:text-white'>
           Global Controls
         </Typography>
 
@@ -341,41 +333,37 @@ export function TaskSettings() {
           >
             Continue All Tasks
           </Button>
-          <Button onClick={openModal} variant='outline' className='text-indigo-600 border-indigo-600'>
+          <Button
+            onClick={openModal}
+            variant='outline'
+            className='text-indigo-600 border-indigo-600'
+          >
             Create New Task
           </Button>
         </Box>
       </Box>
-
       {/* Header */}
       <div className='flex items-center justify-between'>
         <Typography variant='h4' className='font-semibold text-foreground'>
           Tasks Details
         </Typography>
-
       </div>
-
       {/* Tasks Table */}
       <TaskTable />
-
       {/* Global Settings */}
       <LogViewer
-        wsUrl="ws://185.255.131.231:8000/api/v1/logs/stream"
-        logName="forwarder_service.log"
-        title="Forwarder Service Logs"
+        wsUrl='ws://185.255.131.231:8000/api/v1/logs/stream'
+        logName='forwarder_service.log'
+        title='Forwarder Service Logs'
         maxLogs={200}
         autoReconnect={true}
         reconnectInterval={5000}
-      />      <GlobalSettings />
-
+      />{' '}
+      <GlobalSettings />
       {/* Create Task Modal */}
       <CreateTaskModal isOpen={isCreateTaskModalOpen} onClose={closeModal} />
-
       {/* Task Settings Modal */}
-      <TaskSettingsModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      <TaskSettingsModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 }
