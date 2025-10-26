@@ -34,139 +34,192 @@ interface TaskApiResponse {
   size: number;
   totalPages: number;
 }
-function GlobalJoinSettings() {
-  const [minDelay, setMinDelay] = React.useState(30);
-  const [maxDelay, setMaxDelay] = React.useState(60);
-  const [useRandomDelay, setUseRandomDelay] = React.useState(true);
-  const [multipleAccountFolders, setMultipleAccountFolders] = React.useState(true);
+function GlobalJoinSettings({ tasks }: any) {
+  const [selectedTaskId, setSelectedTaskId] = React.useState('');
+
+  // Get the selected task or the first task if none is selected
+  const selectedTask = tasks.find((task: { id: string; }) => task.id === selectedTaskId) || tasks[0];
+
+  // Initialize with the first task's ID when tasks are available
+  React.useEffect(() => {
+    if (tasks.length > 0 && !selectedTaskId) {
+      setSelectedTaskId(tasks[0].id);
+    }
+  }, [tasks, selectedTaskId]);
+
+  // If no tasks, show a message
+  if (!tasks || tasks.length === 0) {
+    return (
+      <Card className='border-border bg-card'>
+        <CardHeader className='px-6 py-4 border-b border-border'>
+          <CardTitle className='text-foreground'>Global Join Settings</CardTitle>
+        </CardHeader>
+        <CardContent className='p-6'>
+          <Typography variant='body' className='text-muted-foreground'>
+            No tasks available
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className='border-border bg-card'>
       <CardHeader className='px-6 py-4 border-b border-border'>
-        <CardTitle className='text-foreground'>Global Join Settings</CardTitle>
+        <div className='flex justify-between items-center'>
+          <CardTitle className='text-foreground'>Task Join Settings</CardTitle>
+          {tasks.length > 1 && (
+            <select
+              value={selectedTaskId}
+              onChange={(e) => setSelectedTaskId(e.target.value)}
+              className='px-3 py-1 border border-border rounded-md bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary'
+            >
+              {tasks.map((task: any) => (
+                <option key={task.id} value={task.id}>
+                  {task.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
       </CardHeader>
       <CardContent className='p-6 space-y-6'>
-        <div>
-          <Typography variant='body' className='font-medium mb-2 text-foreground'>
-            Join Delay
-          </Typography>
-          <Box className='space-y-2'>
-            <Box className='flex justify-between items-center'>
-              <Typography variant='body' className='text-muted-foreground'>
-                Min
+        {selectedTask && (
+          <>
+            <div className='grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg'>
+              <div>
+                <Typography variant='small' className='text-muted-foreground'>
+                  Task Name
+                </Typography>
+                <Typography variant='body' className='font-medium text-foreground'>
+                  {selectedTask.name}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant='small' className='text-muted-foreground'>
+                  Account
+                </Typography>
+                <Typography variant='body' className='font-medium text-foreground'>
+                  {selectedTask.account_phone}
+                </Typography>
+              </div>
+              <div>
+                <Typography variant='small' className='text-muted-foreground'>
+                  Status
+                </Typography>
+                <Typography variant='body' className='font-medium text-foreground'>
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${selectedTask.status === 'done'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                      : selectedTask.status === 'running'
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                        : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                    }`}>
+                    {selectedTask.status}
+                  </span>
+                </Typography>
+              </div>
+              <div>
+                <Typography variant='small' className='text-muted-foreground'>
+                  Progress
+                </Typography>
+                <Typography variant='body' className='font-medium text-foreground'>
+                  {selectedTask.current_index}/{selectedTask.total_groups} groups
+                </Typography>
+              </div>
+            </div>
+
+            <div>
+              <Typography variant='body' className='font-medium mb-2 text-foreground'>
+                Join Delay
               </Typography>
-              <Typography variant='body' className='text-foreground'>
-                {minDelay} sec
-              </Typography>
-            </Box>
-            <Slider
-              value={minDelay}
-              onChange={(_, value) => setMinDelay(value as number)}
-              min={0}
-              max={300}
-              valueLabelDisplay='auto'
-              sx={{ color: 'hsl(var(--primary))' }}
-            />
-          </Box>
-          <Box className='flex justify-between items-center'>
-            <Typography variant='body' className='text-muted-foreground'>
-              Max
-            </Typography>
-            <Typography variant='body' className='text-foreground'>
-              {maxDelay} sec
-            </Typography>
-          </Box>
-          <Slider
-            value={maxDelay}
-            onChange={(_, value) => setMaxDelay(value as number)}
-            min={0}
-            max={300}
-            valueLabelDisplay='auto'
-            sx={{ color: 'hsl(var(--primary))' }}
-          />
-        </div>
-        <div className='flex space-x-4'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={useRandomDelay}
-                onChange={(e) => setUseRandomDelay(e.target.checked)}
-                sx={{
-                  color: 'rgb(59 130 246)',
-                  '&.Mui-checked': {
-                    color: 'rgb(59 130 246)'
-                  }
-                }}
+              <Box className='space-y-2'>
+                <Box className='flex justify-between items-center'>
+                  <Typography variant='body' className='text-muted-foreground'>
+                    Min
+                  </Typography>
+                  <Typography variant='body' className='text-foreground'>
+                    {selectedTask.settings.delay_min} sec
+                  </Typography>
+                </Box>
+                <Slider
+                  value={selectedTask.settings.delay_min}
+                  min={0}
+                  max={300}
+                  valueLabelDisplay='auto'
+                  sx={{ color: 'hsl(var(--primary))' }}
+                  disabled
+                />
+              </Box>
+              <Box className='flex justify-between items-center mt-4'>
+                <Typography variant='body' className='text-muted-foreground'>
+                  Max
+                </Typography>
+                <Typography variant='body' className='text-foreground'>
+                  {selectedTask.settings.delay_max} sec
+                </Typography>
+              </Box>
+              <Slider
+                value={selectedTask.settings.delay_max}
+                min={0}
+                max={300}
+                valueLabelDisplay='auto'
+                sx={{ color: 'hsl(var(--primary))' }}
+                disabled
               />
-            }
-            label={
-              <Typography variant='body' className='text-foreground'>
-                Use Random Delay
-              </Typography>
-            }
-            sx={{ margin: 0, color: 'inherit' }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={useRandomDelay}
-                onChange={(e) => setUseRandomDelay(e.target.checked)}
-                sx={{
-                  color: 'rgb(59 130 246)',
-                  '&.Mui-checked': {
-                    color: 'rgb(59 130 246)'
-                  }
-                }}
+            </div>
+
+            <div className='space-y-3'>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedTask.settings.use_random_delay}
+                    sx={{
+                      color: 'rgb(59 130 246)',
+                      '&.Mui-checked': {
+                        color: 'rgb(59 130 246)'
+                      }
+                    }}
+                    disabled
+                  />
+                }
+                label={
+                  <Typography variant='body' className='text-foreground'>
+                    Use Random Delay
+                  </Typography>
+                }
+                sx={{ margin: 0, color: 'inherit' }}
               />
-            }
-            label={
-              <Typography variant='body' className='text-foreground'>
-                Log Failed Joins
-              </Typography>
-            }
-            sx={{ margin: 0, color: 'inherit' }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={useRandomDelay}
-                onChange={(e) => setUseRandomDelay(e.target.checked)}
-                sx={{
-                  color: 'rgb(59 130 246)',
-                  '&.Mui-checked': {
-                    color: 'rgb(59 130 246)'
-                  }
-                }}
-              />
-            }
-            label={
-              <Typography variant='body' className='text-foreground'>
-                FloodWait Handling
-              </Typography>
-            }
-            sx={{ margin: 0, color: 'inherit' }}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={multipleAccountFolders}
-                onChange={(e) => setMultipleAccountFolders(e.target.checked)}
-                sx={{
-                  color: 'rgb(59 130 246)',
-                  '&.Mui-checked': {
-                    color: 'rgb(59 130 246)'
-                  }
-                }}
-              />
-            }
-            label={
-              <Typography variant='body' className='text-foreground'>
-                Auto Multiple Account Folders
-              </Typography>
-            }
-            sx={{ margin: 0, color: 'inherit' }}
-          />
-        </div>
+
+              <div className='flex justify-between items-center p-3 bg-muted/50 rounded-lg'>
+                <Typography variant='body' className='text-foreground'>
+                  Maximum Groups Per Day
+                </Typography>
+                <Typography variant='body' className='font-medium text-foreground'>
+                  {selectedTask.settings.maximum_groups_per_day}
+                </Typography>
+              </div>
+
+              <div className='grid grid-cols-2 gap-4 mt-4'>
+                <div className='p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800'>
+                  <Typography variant='small' className='text-green-600 dark:text-green-400'>
+                    Successful Joins
+                  </Typography>
+                  <Typography variant='h5' className='text-green-700 dark:text-green-300 font-bold'>
+                    {selectedTask.successful_joins}
+                  </Typography>
+                </div>
+                <div className='p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800'>
+                  <Typography variant='small' className='text-red-600 dark:text-red-400'>
+                    Failed Joins
+                  </Typography>
+                  <Typography variant='h5' className='text-red-700 dark:text-red-300 font-bold'>
+                    {selectedTask.failed_joins}
+                  </Typography>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </CardContent>
     </Card>
   );
@@ -343,7 +396,7 @@ export function JoinManagement() {
       Object.values(pollingIntervals).forEach((interval) => clearInterval(interval));
     };
   }, [pollingIntervals]);
-
+  console.log(tasks, "taskkkkKkk")
   // Task action handlers
   const handleStart = async (taskId: number) => {
     if (startingTasks.has(taskId)) return;
@@ -798,7 +851,7 @@ export function JoinManagement() {
       </Card>
 
       {/* Global Join Settings */}
-      <GlobalJoinSettings />
+      <GlobalJoinSettings tasks={tasks} />
       <EditJoiningTaskModal
         isOpen={editModalOpen}
         onClose={() => setEditModalOpen(false)}
@@ -806,7 +859,7 @@ export function JoinManagement() {
       />
       {/* Logs Section */}
       <LogViewer
-        wsUrl='ws://api.vipadtg.com/api/v1/logs/stream'
+        wsUrl='wss://api.vipadtg.com/api/v1/logs/stream'
         logName='joining_service.log'
         title='Joining Service Logs'
         maxLogs={200}

@@ -123,7 +123,7 @@ const ResultsPanel: React.FC<ResultsPanelProps> = ({ results }) => {
       </Typography>
 
       <LogViewer
-        wsUrl="ws://api.vipadtg.com/api/v1/logs/stream"
+        wsUrl="wss://api.vipadtg.com/api/v1/logs/stream"
         logName="checker_service.log"
         title="Checker Service Logs"
         maxLogs={200}

@@ -11,7 +11,6 @@ export async function middleware(request: NextRequest) {
 
   // Get token from cookies
   const token = request.cookies.get('token')?.value;
-  console.log(token, "token get")
   // If accessing protected route without token, redirect to login
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
     return NextResponse.redirect(new URL("/login", request.url));

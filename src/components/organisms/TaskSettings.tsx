@@ -352,7 +352,7 @@ export function TaskSettings() {
       <TaskTable />
       {/* Global Settings */}
       <LogViewer
-        wsUrl='ws://api.vipadtg.com/api/v1/logs/stream'
+        wsUrl='wss://api.vipadtg.com/api/v1/logs/stream'
         logName='forwarder_service.log'
         title='Forwarder Service Logs'
         maxLogs={200}

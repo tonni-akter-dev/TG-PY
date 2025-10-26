@@ -59,7 +59,7 @@ export function LogViewer() {
     }
 
     // Create new WebSocket connection
-    const wsUrl = `ws://api.vipadtg.com/api/v1/logs/stream?name=${logType}`;
+    const wsUrl = `wss://api.vipadtg.com/api/v1/logs/stream?name=${logType}`;
     socketRef.current = new WebSocket(wsUrl);
 
     // Connection opened

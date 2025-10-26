@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -12,6 +13,7 @@ import TextField from '@mui/material/TextField';
 import ResultsPanel from './ResultsPanel';
 import { toast } from 'react-toastify';
 import { handleApiError } from '@/lib/helper';
+
 // Define the type for the results prop
 interface GroupsChecked {
   current: number;
@@ -37,17 +39,17 @@ interface ResultsData {
   startedAt: string | number | Date;
   finishedAt: string | number | Date;
 }
+
 const CHECKER_API_URL = process.env.NEXT_PUBLIC_CHECKER_URL || 'https://api.vipadtg.com/api/v1';
 
 export function DashboardContent() {
-  // State for metrics
   const [metrics, setMetrics] = React.useState({
-    activeAccounts: '1,234',
-    totalAccounts: '1,234',
+    activeAccounts: '0',
+    totalAccounts: '0',
     lastSync: 'Never'
   });
 
-  // State for checker operations
+  const [isMetricsLoading, setIsMetricsLoading] = React.useState(true);
   const [isChecking, setIsChecking] = React.useState(false);
   const [checkerStatus, setCheckerStatus] = React.useState('idle');
   const [runId, setRunId] = React.useState(null);
@@ -74,31 +76,20 @@ export function DashboardContent() {
     startedAt: '',
     finishedAt: ''
   };
+  
   const [token, setToken] = React.useState<string | null>(null);
+  
   React.useEffect(() => {
     const storedToken = localStorage.getItem('token');
     setToken(storedToken);
   }, []);
 
-  // State for recent activities
-  const [activities, setActivities] = React.useState([
-    {
-      timestamp: '[2025-10-06 10:12:06]',
-      message: 'Light theme applied',
-      type: 'info'
-    },
-    {
-      timestamp: '[2025-10-06 10:12:06]',
-      message: '🔄 Syncing accounts with database...',
-      type: 'sync'
-    },
-    {
-      timestamp: '[2025-10-06 10:12:06]',
-      message:
-        "⚠️ Sync warning: AccountManager object has no attribute 'get_accounts' (continuing...)",
-      type: 'warning'
+  // Fetch accounts data on component mount
+  React.useEffect(() => {
+    if (token) {
+      fetchAccountsData();
     }
-  ]);
+  }, [token]);
 
   // State for polling
   const [pollingInterval, setPollingInterval] = React.useState<NodeJS.Timeout | null>(null);
@@ -106,12 +97,70 @@ export function DashboardContent() {
   // Function to add activity
   const addActivity = (message: string, type: string) => {
     const timestamp = `[${new Date().toISOString().replace('T', ' ').substring(0, 19)}]`;
-    setActivities((prev) => [{ timestamp, message, type }, ...prev].slice(0, 10));
+  };
+
+  // Function to fetch accounts data and update metrics
+  const fetchAccountsData = async () => {
+    setIsMetricsLoading(true);
+    try {
+      console.log('Fetching accounts data...');
+      const response = await fetch(`${CHECKER_API_URL}/accounts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorMessage = await handleApiError(response);
+        throw new Error(errorMessage);
+      }
+      
+      const responseData = await response.json();
+      console.log('Full response data:', responseData);
+      
+      // Update metrics with the response data
+      if (responseData && responseData.data && Array.isArray(responseData.data)) {
+        // Count total accounts
+        const totalAccounts = responseData.data.length;
+        console.log('Total accounts calculated:', totalAccounts);
+        
+        // Count active accounts (where active field is true)
+        const activeAccounts = responseData.data.filter((account: { active: boolean; }) => account.active === true).length;
+        console.log('Active accounts calculated:', activeAccounts);
+        
+        // Log each account to debug
+        responseData.data.forEach((account: any, index: number) => {
+          console.log(`Account ${index}:`, account);
+          console.log(`Account ${index} active status:`, account.active);
+        });
+        
+        setMetrics({
+          activeAccounts: activeAccounts.toString(),
+          totalAccounts: totalAccounts.toString(),
+          lastSync: new Date().toLocaleString()
+        });
+        
+        console.log('Metrics updated:', {
+          activeAccounts: activeAccounts.toString(),
+          totalAccounts: totalAccounts.toString(),
+          lastSync: new Date().toLocaleString()
+        });
+      } else {
+        console.error('Invalid response data structure:', responseData);
+      }
+    } catch (error) {
+      console.error('Failed to fetch accounts data:', error);
+    } finally {
+      setIsMetricsLoading(false);
+    }
   };
 
   // Function to fetch checker status by ID
   const fetchCheckerStatus = async (checkerRunId: any) => {
-    console.log(checkerRunId, 'checker run id');
     try {
       const response = await fetch(`${CHECKER_API_URL}/checker/status/${checkerRunId}`, {
         method: 'GET',
@@ -202,15 +251,22 @@ export function DashboardContent() {
       }
 
       const data = await response.json();
+      console.log('Sync response:', data);
 
-      // Update metrics with response data
-      setMetrics({
-        activeAccounts: data.active_accounts
-          ? data.active_accounts.toString()
-          : metrics.activeAccounts,
-        totalAccounts: data.total_accounts ? data.total_accounts.toString() : metrics.totalAccounts,
-        lastSync: new Date().toLocaleString()
-      });
+      // If the sync endpoint doesn't return the account counts, fetch them separately
+      if (data.data && data.data.accounts) {
+        const totalAccounts = data.data.accounts.length;
+        const activeAccounts = data.data.accounts.filter((account: { active: boolean; }) => account.active === true).length;
+        
+        setMetrics({
+          activeAccounts: activeAccounts.toString(),
+          totalAccounts: totalAccounts.toString(),
+          lastSync: new Date().toLocaleString()
+        });
+      } else {
+        // If the sync endpoint doesn't return account data, fetch it separately
+        await fetchAccountsData();
+      }
 
       addActivity('✅ Accounts synced successfully', 'success');
       toast.success('Accounts synced successfully');
@@ -390,7 +446,16 @@ export function DashboardContent() {
             <Users className='h-4 w-4 text-blue-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold text-foreground'>{metrics.activeAccounts}</div>
+            <div className='text-2xl font-bold text-foreground'>
+              {isMetricsLoading ? (
+                <div className='flex items-center'>
+                  <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2'></div>
+                  Loading...
+                </div>
+              ) : (
+                metrics.activeAccounts
+              )}
+            </div>
           </CardContent>
         </Card>
         <Card className='border-border bg-card hover:bg-accent/50 transition-colors'>
@@ -401,7 +466,16 @@ export function DashboardContent() {
             <UserCheck className='h-4 w-4 text-green-500' />
           </CardHeader>
           <CardContent>
-            <div className='text-2xl font-bold text-foreground'>{metrics.totalAccounts}</div>
+            <div className='text-2xl font-bold text-foreground'>
+              {isMetricsLoading ? (
+                <div className='flex items-center'>
+                  <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin mr-2'></div>
+                  Loading...
+                </div>
+              ) : (
+                metrics.totalAccounts
+              )}
+            </div>
           </CardContent>
         </Card>
 
