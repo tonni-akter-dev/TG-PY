@@ -18,10 +18,17 @@ interface Account {
   daily_group_limit: number;
 }
 
-const AccountsTable = ({ onRemoveAccount }: { onRemoveAccount: (num: string) => void }) => {
+const AccountsTable = ({ 
+  onRemoveAccount, 
+  onFixAccount 
+}: { 
+  onRemoveAccount: (num: string) => void;
+  onFixAccount: (num: string) => void;
+}) => {
   const [accounts, setAccounts] = React.useState<Account[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [fixingAccounts, setFixingAccounts] = React.useState<Set<string>>(new Set());
   const token = localStorage.getItem('token');
 
   const fetchAccounts = async () => {
@@ -73,6 +80,24 @@ const AccountsTable = ({ onRemoveAccount }: { onRemoveAccount: (num: string) => 
       second: '2-digit',
       hour12: false
     });
+  };
+
+  const handleFixAccount = async (phone: string) => {
+    // Add phone to fixing set to show loading state
+    setFixingAccounts(prev => new Set(prev).add(phone));
+    
+    try {
+      await onFixAccount(phone);
+      // Refresh accounts after successful fix
+      fetchAccounts();
+    } finally {
+      // Remove phone from fixing set
+      setFixingAccounts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(phone);
+        return newSet;
+      });
+    }
   };
 
   return (
@@ -132,7 +157,7 @@ const AccountsTable = ({ onRemoveAccount }: { onRemoveAccount: (num: string) => 
               <tbody className='divide-y divide-border'>
                 {accounts.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className='px-6 py-4 text-center text-muted-foreground'>
+                    <td colSpan={8} className='px-6 py-4 text-center text-muted-foreground'>
                       No accounts found.
                     </td>
                   </tr>
@@ -183,6 +208,15 @@ const AccountsTable = ({ onRemoveAccount }: { onRemoveAccount: (num: string) => 
                         <Typography variant='small' className='text-muted-foreground'>
                           {account.daily_group_limit}
                         </Typography>
+                      </td>
+                      <td className='px-6 py-4 whitespace-nowrap'>
+                        <Button 
+                          variant='outline' 
+                          onClick={() => handleFixAccount(account.phone)}
+                          disabled={fixingAccounts.has(account.phone)}
+                        >
+                          {fixingAccounts.has(account.phone) ? 'Fixing...' : 'Fix'}
+                        </Button>
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap'>
                         <div className='flex items-center space-x-2'>

@@ -46,6 +46,7 @@ export function AccountManagement() {
   // New states for API operations
   const [isDeactivatingAll, setIsDeactivatingAll] = React.useState(false);
   const [isActivatingAll, setIsActivatingAll] = React.useState(false);
+  const [isFixingAll, setIsFixingAll] = React.useState(false);
   const [isRemovingAccount, setIsRemovingAccount] = React.useState(false);
   const [notification, setNotification] = React.useState<{
     open: boolean;
@@ -209,6 +210,39 @@ export function AccountManagement() {
     }
   };
 
+  // New function to fix an account
+  const handleFixAccount = async (phone: string) => {
+    try {
+      const response = await fetch(`https://api.vipadtg.com/api/v1/accounts/${phone}/fix`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setNotification({
+        open: true,
+        message: `Account ${phone} fixed successfully!`,
+        severity: 'success'
+      });
+      setRefreshTable((prev) => prev + 1); // Trigger table refresh
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage);
+      setNotification({
+        open: true,
+        message: `Failed to fix account: ${errorMessage}`,
+        severity: 'error'
+      });
+    }
+  };
+
   // New function to deactivate all accounts
   const handleDeactivateAll = async () => {
     setIsDeactivatingAll(true);
@@ -281,6 +315,42 @@ export function AccountManagement() {
     }
   };
 
+  // New function to fix all accounts
+  const handleFixAll = async () => {
+    setIsFixingAll(true);
+    try {
+      const response = await fetch(`https://api.vipadtg.com/api/v1/accounts/fix-all`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setNotification({
+        open: true,
+        message: `Successfully fixed ${result.data.updated} accounts!`,
+        severity: 'success'
+      });
+      setRefreshTable((prev) => prev + 1); // Trigger table refresh
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred.';
+      setError(errorMessage);
+      setNotification({
+        open: true,
+        message: `Failed to fix accounts: ${errorMessage}`,
+        severity: 'error'
+      });
+    } finally {
+      setIsFixingAll(false);
+    }
+  };
+
   // Close notification
   const handleCloseNotification = () => {
     setNotification({ ...notification, open: false });
@@ -288,7 +358,11 @@ export function AccountManagement() {
 
   return (
     <div className='space-y-6 lg:space-y-8 bg-gray-100 dark:bg-gray-900'>
-      <AccountsTable key={refreshTable} onRemoveAccount={handleRemoveAccount} />
+      <AccountsTable 
+        key={refreshTable} 
+        onRemoveAccount={handleRemoveAccount} 
+        onFixAccount={handleFixAccount}
+      />
       <LogsSocket />
 
       <Box className='flex flex-wrap gap-2'>
@@ -314,6 +388,14 @@ export function AccountManagement() {
           disabled={isDeactivatingAll}
         >
           {isDeactivatingAll ? 'Deactivating...' : 'Deactivate All'}
+        </Button>
+        <Button
+          variant='outline'
+          className='text-red-600 border-red-600'
+          onClick={handleFixAll}
+          disabled={isFixingAll}
+        >
+          {isFixingAll ? 'Fixing...' : 'Fix All'}
         </Button>
       </Box>
 

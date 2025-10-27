@@ -30,7 +30,7 @@ export function LogViewer() {
   React.useEffect(() => {
     const fetchLogTypes = async () => {
       try {
-        const response = await fetch('https://api.vipadtg.com/api/v1/logs');
+        const response = await fetch('https://api.vipadtg.com/api/v1/logs/files');
         if (response.ok) {
           const logTypes = await response.json();
           setAvailableLogTypes(logTypes);

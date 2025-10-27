@@ -32,7 +32,6 @@ export default function LogsSocket(): JSX.Element {
 
     return (
         <div>
-            <h3>Realtime logs</h3>
             <div style={{ maxHeight: 400, overflow: 'auto' }}>
                 {logs.map((l, i) => <pre key={i}>{typeof l === 'string' ? l : JSON.stringify(l, null, 2)}</pre>)}
             </div>
