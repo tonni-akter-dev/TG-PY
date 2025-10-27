@@ -124,32 +124,6 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center'>
-                <input
-                  id='remember-me'
-                  name='remember-me'
-                  type='checkbox'
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className='h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded'
-                />
-                <label htmlFor='remember-me' className='ml-2 block text-sm text-gray-900'>
-                  Remember me
-                </label>
-              </div>
-
-              <div className='text-sm'>
-                <Link
-                  href='/forgot-password'
-                  className='font-medium text-purple-600 hover:text-purple-500'
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-            </div>
-
             {error && <div className='text-red-500 text-sm mt-2'>{error}</div>}
 
             <div>
@@ -163,14 +137,7 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <div className='mt-6 text-center'>
-            <p className='text-sm text-gray-600'>
-              {`Don't have an account?`}
-              <Link href='/register' className='font-medium text-purple-600 hover:text-purple-500'>
-                Register
-              </Link>
-            </p>
-          </div>
+       
         </div>
       </div>
     </div>

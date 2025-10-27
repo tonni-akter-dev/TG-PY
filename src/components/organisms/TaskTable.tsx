@@ -564,7 +564,7 @@ const TaskTable = () => {
                         </Typography>
                       </td>
                       <td className='px-6 py-4 whitespace-nowrap bg-white dark:bg-[#252139]'>
-                        <div className='flex items-center space-x-2'>
+                        <div className='flex gap-2 items-center space-x-2'>
                           <Button
                             variant='outlined'
                             size='small'
